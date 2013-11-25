@@ -50,12 +50,16 @@
 
 	During the resolution of the problem we must find the sequence of jobs on the flowshop, the groups of jobs to be delivered and the sequence of delivery for each group.
 
-	We proposed a first way of encoding a solution : a table of size $n$ containing the sequence of job for the flowshop subproblem, a table of size $2n$ containing the groups and sequences for the traveling salesman subproblem. The first cell of the second table contains the number of jobs for the first group, the following cells contain the number of jobs in the delivery sequence and so on.
+	We proposed a first way of encoding a solution : a table of size $n$ containing the sequence of job for the flowshop subproblem, a table of size $2n$ containing the groups and sequences for the traveling salesman subproblem. The first cell of the second table contains the number of jobs for the first group, the following cells contain the number of jobs in the delivery sequence and so on. The figure \ref{problem} shows a solution for a simple instance of the problem with its encoding. 
+	
+	The sequence here is $\{1,2,3\}$ the first group $G_1$ of jobs is $G_1 = \{1,2\}$ and 1 is delivered first, the second group $G_2$ only contains one job $G_2 = \{3\}$.
 	
 \begin{figure}
 	\centering \includegraphics{images/problem.pdf}
-	\caption {Schema of the problem}	
+	\caption {A solution of the problem for a simple instance}	
 	\label {problem}
 \end{figure}
+
+
 
 \end{document}
