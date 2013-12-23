@@ -7,6 +7,7 @@
 #ifndef SOLUTION_H_
 #include "Instance.h"
 #include <climits>
+#include <algorithm>
 #define SOLUTION_H_
 
 /**
