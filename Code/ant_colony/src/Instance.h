@@ -1,6 +1,5 @@
 /*
  * Instance.h
- *
  *  Created on: 25 nov. 2013
  *      Author: Thomas
  */
@@ -11,21 +10,24 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * This class contains the data of an instance for our mixed scheduling problem.
+ */
 class Instance {
 private:
-	// The number of jobs
+	/** The number of jobs */
 	int n;
-	// The processing times for M1
+	/** The processing times for M1 */
 	int *a;
-	// The processing times for M2
+	/** The processing times for M2 */
 	int *b;
-	// The due dates
+	/** The due dates */
 	int *d;
-	// The number of destinations
+	/** The number of destinations */
 	int m;
-	// The destinations of the jobs (k[j] is the destination of job j)
+	/** The destinations of the jobs (k[j] is the destination of job j) */
 	int *k;
-	// The distance matrix
+	/** The distance matrix */
 	int **K;
 public:
 	Instance(int n, int m);
