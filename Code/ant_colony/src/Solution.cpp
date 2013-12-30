@@ -47,29 +47,38 @@ void Solution::refresh(bool whole) {
 	// For each group of jobs we compute the completion times for the traveling salesman problem.
 	while (i < n * 2) {
 		k = t[i];
-		i++;
-		max = 0;
-		// The truck leaves at the max completion time of the jobs of the group (or last date of arrival of the truck if the date is greater).
-		for (int j = i; j < i + k; j++) {
-			max = std::max(t[j], max);
-		}
-		date = std::max(max, date);
+		if (k == 0) {
+			i = n * 2;
+		} else {
+			i++;
+			max = 0;
+			// The truck leaves at the max completion time of the jobs of the group (or last date of arrival of the truck if the date is greater).
+			for (int j = i; j < i + k; j++) {
+				max = std::max(c[t[j]], max);
+			}
+			date = std::max(max, date);
 
-		// We compute the completion times of the traveling salesman problem for ou group of jobs.
-		// Distance between factory and first destination
-		date += I->getK(0, I->getk(t[i]));
-		for (int j = i + 1; j < i + k; j++) {
-			// Distance between last destination and next destination
-			date += I->getK(I->getk(t[i - 1]), I->getk(t[i]));
-		}
-		// Distance between last destination and factory
-		date += date += I->getK(I->getk(t[i + k - 1]), 0);
+			// We compute the completion times of the traveling salesman problem for our group of jobs.
+			// Distance between factory and first destination
+			date += I->getK(0, I->getk(t[i]));
+			for (int j = i + 1; j < i + k; j++) {
+				// Distance between last destination and next destination
+				date += I->getK(I->getk(t[j - 1]), I->getk(t[j]));
+			}
+			// Distance between last destination and factory
+			date += I->getK(I->getk(t[i + k - 1]), 0);
 
-		// We set the completion times of the jobs
-		for (int j = i; j < i + k; j++) {
-			C[j] = date;
+			// We set the completion times of the jobs
+			for (int j = i; j < i + k; j++) {
+				C[t[j]] = date;
+			}
+			i += k;
 		}
-		i += k;
+	}
+	L = 0;
+	for (int i = 0; i < n; i++) {
+		l[i] = C[i] - I->getD(i);
+		L += l[i];
 	}
 }
 

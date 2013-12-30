@@ -38,7 +38,7 @@ int main() {
 	// Test solution
 	Solution solution(&instance);
 	int s[] = {0,1,2};
-	int t[] = {1,0,1,1,1,2};
+	int t[] = {2,0,1,1,2,0};
 	solution.setS(s);
 	solution.setT(t);
 	solution.refresh(true);

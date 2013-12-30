@@ -34,7 +34,7 @@ public:
 	virtual ~Instance();
 	void print(ostream &flux) const;
 
-	int getA(int j) const {
+	int getA(int j) {
 		return this->a[j];
 	}
 
@@ -42,7 +42,7 @@ public:
 		this->a[j] = p;
 	}
 
-	const int getB(int j) const {
+	int getB(int j) {
 		return b[j];
 	}
 
@@ -50,7 +50,7 @@ public:
 		this->b[j] = p;
 	}
 
-	const int getD(int j) const {
+	int getD(int j) {
 		return d[j];
 	}
 
@@ -58,7 +58,7 @@ public:
 		this->d[j] = d;
 	}
 
-	const int getk(int j) const {
+	int getk(int j) {
 		return k[j];
 	}
 
@@ -66,7 +66,7 @@ public:
 		this->k[j] = k;
 	}
 
-	const int getK(int i, int j) const {
+	int getK(int i, int j) {
 		return K[i][j];
 	}
 
@@ -74,7 +74,7 @@ public:
 		this->K[i][j] = d;
 	}
 
-	int getM() const {
+	int getM() {
 		return m;
 	}
 
@@ -82,7 +82,7 @@ public:
 		this->m = m;
 	}
 
-	int getN() const {
+	int getN() {
 		return n;
 	}
 
