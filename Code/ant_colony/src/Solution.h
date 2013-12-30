@@ -22,27 +22,29 @@ private:
 	/** The array containing the groups of jobs to be delivered as well as they delivery order (see report). */
 	int *t;
 	/**	The array of completion times for our jobs in the flowshop subproblem. */
-	int c;
+	int *c;
 	/**	The array of completion times for ou jobs for the traveling salesman subproblem. (completion time of the complete problem)  */
-	int C;
+	int *C;
 	/** The array of lateness for our jobs. */
 	int *l;
 	/** The sum of lateness, this is our objective function. */
 	int L;
+
+public:
+	Solution(Instance*);
+	virtual ~Solution();
+	void print(ostream &flux) const;
+
 	/** Does the calculations of the solution.
 	 *  @param whole True is the function must refresh the whole solution. False is we must only refresh from the array t.
 	 */
 	void refresh(bool whole);
 
-public:
-	Solution(Instance*);
-	virtual ~Solution();
-
 	const Instance* getI() const {
 		return I;
 	}
 
-	void setI(const Instance* i) {
+	void setI(Instance* i) {
 		I = i;
 	}
 
@@ -66,9 +68,11 @@ public:
 		return l;
 	}
 
-	int getL() const {
+	int getl() const {
 		return L;
 	}
 };
+
+ostream& operator<<(ostream &flux, const Solution& solution);
 
 #endif /* SOLUTION_H_ */

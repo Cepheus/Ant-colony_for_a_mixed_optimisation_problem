@@ -51,9 +51,9 @@ void Solution::refresh(bool whole) {
 		max = 0;
 		// The truck leaves at the max completion time of the jobs of the group (or last date of arrival of the truck if the date is greater).
 		for (int j = i; j < i + k; j++) {
-			max = max(t[j], max);
+			max = std::max(t[j], max);
 		}
-		date = max(max, date);
+		date = std::max(max, date);
 
 		// We compute the completion times of the traveling salesman problem for ou group of jobs.
 		// Distance between factory and first destination
@@ -63,7 +63,7 @@ void Solution::refresh(bool whole) {
 			date += I->getK(I->getk(t[i - 1]), I->getk(t[i]));
 		}
 		// Distance between last destination and factory
-		date += date += I->getK(I->getk(t[i+k-1]), 0);
+		date += date += I->getK(I->getk(t[i + k - 1]), 0);
 
 		// We set the completion times of the jobs
 		for (int j = i; j < i + k; j++) {
@@ -71,5 +71,45 @@ void Solution::refresh(bool whole) {
 		}
 		i += k;
 	}
+}
 
+void Solution::print(ostream &flux) const {
+	int n = I->getN();
+
+	flux << "s ";
+	for (int j = 0; j < n; j++) {
+		flux << s[j] << " ";
+	}
+	flux << endl;
+
+	flux << "t ";
+	for (int j = 0; j < n * 2; j++) {
+		flux << t[j] << " ";
+	}
+	flux << endl;
+
+	flux << "c ";
+	for (int j = 0; j < n; j++) {
+		flux << c[j] << " ";
+	}
+	flux << endl;
+
+	flux << "C ";
+	for (int j = 0; j < n; j++) {
+		flux << C[j] << " ";
+	}
+	flux << endl;
+
+	flux << "l ";
+	for (int j = 0; j < n; j++) {
+		flux << l[j] << " ";
+	}
+	flux << endl;
+
+	flux << "L " << L << endl;
+}
+
+ostream& operator<<(ostream &flux, const Solution& solution) {
+	solution.print(flux);
+	return flux;
 }
