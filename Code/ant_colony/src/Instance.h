@@ -1,10 +1,11 @@
 /*
  * Instance.h
  *  Created on: 25 nov. 2013
- *      Author: Thomas
+ *      Author: Thomas Noguer
  */
 
 #ifndef INSTANCE_H_
+#include "Job.h"
 #define INSTANCE_H_
 
 #include <iostream>
@@ -12,58 +13,59 @@ using namespace std;
 
 /**
  * This class contains the data of an instance for our mixed scheduling problem.
+ * @author Thomas Noguer
  */
 class Instance {
 private:
-	/** The number of jobs */
+	/** The number of jobs. */
 	int n;
-	/** The processing times for M1 */
-	int *a;
-	/** The processing times for M2 */
-	int *b;
-	/** The due dates */
-	int *d;
-	/** The number of destinations */
+	/** The number of destinations. */
 	int m;
-	/** The destinations of the jobs (k[j] is the destination of job j) */
-	int *k;
-	/** The distance matrix */
+	/** The list of jobs. */
+	Job* jobs;
+	/** The distance matrix. */
 	int **K;
 public:
 	Instance(int n, int m);
 	virtual ~Instance();
 	void print(ostream &flux) const;
 
-	int getA(int j) {
-		return this->a[j];
+	/**
+	 * @return the list of jobs.
+	 */
+	Job* getJobs() {
+		return jobs;
 	}
 
-	void setA(int j, int p) {
-		this->a[j] = p;
+	/**
+	 * @param id The id of the job to return.
+	 * @return The job of id id.
+	 */
+	Job getJob(int id) {
+		return jobs[id];
 	}
 
-	int getB(int j) {
-		return b[j];
+	/**
+	 * Adds the job i to the list.
+	 * @param i The id of the job, also its position in the array.
+	 * @param a The processing time of the job on M1.
+	 * @param b The processing time of the job on M2.
+	 * @param k The id of destination of the job.
+	 */
+	void setJob(int i, int a, int b, int d, int k) {
+		jobs[i].setA(a);
+		jobs[i].setB(b);
+		jobs[i].setD(d);
+		jobs[i].setK(k);
 	}
 
-	void setB(int j, int p) {
-		this->b[j] = p;
-	}
-
-	int getD(int j) {
-		return d[j];
-	}
-
-	void setD(int j, int d) {
-		this->d[j] = d;
-	}
-
-	int getk(int j) {
-		return k[j];
-	}
-
-	void setk(int j, int k) {
-		this->k[j] = k;
+	/**
+	 * Adds the job i to the list.
+	 * @param i The id of the job, also its position in the array.
+	 * @param job The job to add to the list.
+	 */
+	void setJob(int i, Job job) {
+		jobs[i] = job;
 	}
 
 	int getK(int i, int j) {

@@ -10,19 +10,14 @@
 Instance::Instance(int n, int m) {
 	this->n = n;
 	this->m = m;
-	this->a = new int[n];
-	this->b = new int[n];
-	this->d = new int[n];
-	this->k = new int[n];
+	this->jobs = new Job[n]();
 	this->K = new int*[m];
 	for (int i = 0; i < m; i++)
 		this->K[i] = new int[m];
 }
 
 Instance::~Instance() {
-	delete a;
-	delete b;
-	delete d;
+	delete jobs;
 	for (int i = 0; i < m; i++)
 		delete[] K[i];
 	delete[] K;
@@ -40,25 +35,25 @@ void Instance::print(ostream &flux) const {
 
 	flux << "a ";
 	for (int j = 0; j < n; j++) {
-		flux << a[j] << " ";
+		flux << jobs[j].getA() << " ";
 	}
 	flux << endl;
 
 	flux << "b ";
 	for (int j = 0; j < n; j++) {
-		flux << b[j] << " ";
+		flux << jobs[j].getB() << " ";
 	}
 	flux << endl;
 
 	flux << "d ";
 	for (int j = 0; j < n; j++) {
-		flux << d[j] << " ";
+		flux << jobs[j].getD() << " ";
 	}
 	flux << endl;
 
 	flux << "k ";
 	for (int j = 0; j < n; j++) {
-		flux << k[j] << " ";
+		flux << jobs[j].getK() << " ";
 	}
 	flux << endl;
 

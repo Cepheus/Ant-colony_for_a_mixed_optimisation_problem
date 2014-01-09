@@ -20,10 +20,7 @@ int main() {
 	int m = 3;
 	Instance instance(n, m);
 	for (int j = 0; j < n; j++) {
-		instance.setA(j, j + 1);
-		instance.setB(j, j + 1);
-		instance.setD(j, n - j);
-		instance.setk(j, (j)%2+1);
+		instance.setJob(j, j + 1, j + 1, n - j, j % 2 + 1);
 	}
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < m; j++) {
@@ -33,14 +30,14 @@ int main() {
 				instance.setK(i, j, i + j);
 		}
 	}
-	//cout << instance;
+	cout << instance;
 
 	// Test solution
 	Solution solution(&instance);
-	int s[] = {0,1,2};
-	int t[] = {2,0,1,1,2,0};
+	int s[] = { 0, 1, 2 };
+	int r[] = { 1, 0, 1, 1, 1, 2 };
 	solution.setS(s);
-	solution.setT(t);
+	solution.setR(r);
 	solution.refresh(true);
 	cout << solution;
 

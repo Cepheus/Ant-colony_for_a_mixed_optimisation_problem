@@ -6,6 +6,7 @@
 
 #ifndef SOLUTION_H_
 #include "Instance.h"
+#include "Job.h"
 #include <climits>
 #include <algorithm>
 #define SOLUTION_H_
@@ -17,18 +18,18 @@ class Solution {
 private:
 	/** The instance for which the solution comes from. */
 	Instance* I;
+	/** The list of jobs. */
+	Job *jobs;
 	/** The sequence of jobs for the flowshop problem. */
 	int *s;
 	/** The array containing the groups of jobs to be delivered as well as they delivery order (see report). */
-	int *t;
-	/**	The array of completion times for our jobs in the flowshop subproblem. */
-	int *c;
-	/**	The array of completion times for ou jobs for the traveling salesman subproblem. (completion time of the complete problem)  */
-	int *C;
-	/** The array of lateness for our jobs. */
-	int *l;
+	int *r;
 	/** The sum of lateness, this is our objective function. */
-	int L;
+	int T;
+	/** The number of jobs that waited for the truck. */
+	int v;
+	/** The number of jobs the truck waited to complete. */
+	int w;
 
 public:
 	Solution(Instance*);
@@ -56,20 +57,16 @@ public:
 		this->s = s;
 	}
 
-	int* getT() const {
-		return t;
+	int* getR() const {
+		return r;
 	}
 
-	void setT(int* t) {
-		this->t = t;
+	void setR(int* r) {
+		this->r = r;
 	}
 
-	int* getL() const {
-		return l;
-	}
-
-	int getl() const {
-		return L;
+	int getT() const {
+		return T;
 	}
 };
 
