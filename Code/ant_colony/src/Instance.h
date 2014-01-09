@@ -53,6 +53,7 @@ public:
 	 * @param k The id of destination of the job.
 	 */
 	void setJob(int i, int a, int b, int d, int k) {
+		jobs[i].setId(i);
 		jobs[i].setA(a);
 		jobs[i].setB(b);
 		jobs[i].setD(d);
@@ -66,6 +67,10 @@ public:
 	 */
 	void setJob(int i, Job job) {
 		jobs[i] = job;
+	}
+
+	void setJobs(Job* jobs) {
+		this->jobs = jobs;
 	}
 
 	int getK(int i, int j) {

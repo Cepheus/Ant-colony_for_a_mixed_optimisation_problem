@@ -19,6 +19,14 @@ public:
 	Job(int id, int a, int b, int d, int k);
 	virtual ~Job();
 
+	int getId() {
+		return this->id;
+	}
+
+	void setId(int id) {
+		this->id = id;
+	}
+
 	int getA() {
 		return this->a;
 	}

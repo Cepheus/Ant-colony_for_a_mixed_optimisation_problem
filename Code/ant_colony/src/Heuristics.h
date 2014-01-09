@@ -7,6 +7,8 @@
 
 #ifndef HEURISTICS_H_
 #include "Job.h"
+#include "Cliste.h"
+#include <climits>
 #define HEURISTICS_H_
 
 /** This class contains the tools and heuristics used to find the solution of our problem.
@@ -28,9 +30,11 @@ public:
 	/**
 	 * Johnson's algorithm.
 	 * @param jobs The list of jobs to be scheduled.
+	 * @param n The number of jobs to be scheduled.
+	 * @param sequence The array in which we will put the schedule
 	 * @return The scheduled sequence of id of jobs.
 	 */
-	int* Jonhson(Job* jobs);
+	int* Jonhson(Job* jobs, int n, int* sequence);
 
 	/**
 	 * The batch heuristic.

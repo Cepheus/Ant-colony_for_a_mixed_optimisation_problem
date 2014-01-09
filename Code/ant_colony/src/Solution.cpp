@@ -29,7 +29,7 @@ void Solution::refresh(bool whole) {
 		// For each job of the sequence s we compute the completion times of the flowshop
 		for (int i = 0; i < n; i++) {
 			date += jobs[s[i]].getA();
-			if (date > jobs[s[i - 1]].getc() || i == 0)
+			if (i == 0 || date > jobs[s[i - 1]].getc())
 				jobs[s[i]].setc(date + jobs[s[i]].getB());
 			else
 				jobs[s[i]].setc(jobs[s[i - 1]].getc() + jobs[s[i]].getB());
@@ -62,7 +62,7 @@ void Solution::refresh(bool whole) {
 				date += I->getK(jobs[r[j - 1]].getK(), jobs[r[j]].getK());
 			}
 			// Distance between last destination and factory
-			date += I->getK(jobs[r[i+k-1]].getK(), 0);
+			date += I->getK(jobs[r[i + k - 1]].getK(), 0);
 
 			// We set the completion times of the jobs
 			for (int j = i; j < i + k; j++) {
@@ -74,7 +74,7 @@ void Solution::refresh(bool whole) {
 	T = 0;
 	for (int i = 0; i < n; i++) {
 		jobs[i].setL(jobs[i].getC() - jobs[i].getD());
-		T += jobs[i].getL();
+		T += std::max(jobs[i].getL(), 0);
 	}
 }
 
@@ -87,7 +87,7 @@ void Solution::print(ostream &flux) const {
 	}
 	flux << endl;
 
-	flux << "t ";
+	flux << "r ";
 	for (int j = 0; j < n * 2; j++) {
 		flux << r[j] << " ";
 	}
