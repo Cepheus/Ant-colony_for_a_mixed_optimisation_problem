@@ -27,15 +27,15 @@
 
 \chapter{Formalization of the problem}
 
-	The problem can be defined from three differents subproblems :
+	The problem can be defined from three different sub-problems :
 	
 \begin{itemize}
 \item[$\bullet$] The two machines permutation flowshop. We have two machines $M_1$ and $M_2$ organized as a flowshop. A set of $n$ jobs have to be scheduled into a sequence. Each job $j$ has a value $a_j$ and $b_j$ that correspond to the time required to complete the job $j$ on $M_1$ and $M_2$ respectively.
-\item[$\bullet$] The grouping of jobs to be delivered. When the jobs are completed for the two machines permutation flowshop we must form groups of jobs, where a group must contain at least one job. These groups are then used for the third subproblem.
-\item[$\bullet$] A traveling salesman problem. We consider one truck taking the group of jobs previously formed where each job has a destination $k_j$. The idea is to find the sequence of destinations in order to deliver every job from the group while minimizing the traveling distance. We have a matrix $K$ ($m \times m$) where $m$ is the number of destinations and $K_i^j$ is the distance between the destination $i$ and $j$.
+\item[$\bullet$] The grouping of jobs to be delivered. When the jobs are completed for the two machines permutation flowshop we must form groups of jobs, where a group must contain at least one job. These groups are then used for the third sub-problem.
+\item[$\bullet$] A travelling salesman problem. We consider one truck taking the group of jobs previously formed where each job has a destination $k_j$. The idea is to find the sequence of destinations in order to deliver every job from the group while minimizing the travelling distance. We have a matrix $K$ ($m \times m$) where $m$ is the number of destinations and $K_i^j$ is the distance between the destination $i$ and $j$.
 \end{itemize}
 
-	The objective function is to minimize the sum of lateness of the jobs $\overset{j \leq n}{\underset{j=1}{\sum}} L_j$. The lateness $L_j$  of a job $j$ is the difference between the completion time of the job $c_j$ and its due date $d_j$: $L_j = c_j - d_j$. The completion time of a job is not equal to the completion time of the job for the flowshop problem but for the traveling salesman problem. \textbf{$c_j$ is equal to the date at which the truck is coming back to the factory after its deliveries.}
+	The objective function is to minimize the sum of tardiness of the jobs $\overset{j \leq n}{\underset{j=1}{\sum}} T_j$. The tardiness $T_j$ of a job is defined as follows: $T_j = max(L_j, 0)$ where the lateness $L_j$  of a job $j$ is the difference between the completion time of the job $c_j$ and its due date $d_j$: $L_j = c_j - d_j$. The completion time of a job is not equal to the completion time of the job for the flowshop problem but for the travelling salesman problem. \textbf{$c_j$ is equal to the date at which the truck is coming back to the factory after its deliveries.}
 \textbf{We consider that the truck has no capacity limit, it can carry has many jobs has possible.}
 \\
 
@@ -144,7 +144,7 @@ P^m_{}ij= \left\{
 	We can still consider the other two sub-problems as potential candidate for the ant colony. Indeed, the flowshop problem and the grouping problem can both be considered central in our global problem. \textbf{We then have three possibilities, use the ant colony on the flowshop, on the grouping problem or both and use simple heuristics coupled with a surrogate mechanism to obtain the value of the objective function for our solution in order to guide the ants towards the best solution.} The surrogate mechanism could be very useful in order to save time computation, it would be used in the majority of cases and replaced with heuristics in the others in order to verify if the current solution is still a good one.
 \\	
 
-\subsection{Definition of the Ant colony to the combined problem}
+\subsection{Definition of the Ant colony for the mixed optimisation problem}
 	
 	Here we decided to use the ant colony metaheuristic on the grouping problem. It is easy to find heuristics to construct the rest of the solution when we have the groups of jobs. We have to specify how to implement the ant colony algorithm to our sub-problem. This typical visualisation we use for an ant building a solution of the travelling salesman problem is a complete graph. The nodes of the graph are cities, when the ant goes from city $a$ to city $b$ is means we have the sequence $ab$ in our solution. The ant has to visit all nodes with a specific path. It chooses a path from the probability formula defined before.
 	
@@ -168,7 +168,7 @@ P^m_{}ij= \left\{
 \\
 
 \[
-\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\delta_{0i} \cdot \delta_{0j}}{\delta_{max}}
+\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\sqrt{\delta_{0i} \cdot \delta_{0j}}}{\delta_{max}}
 \]
 \\
 
@@ -188,20 +188,20 @@ P^m_{}ij= \left\{
 
 \[
 \eta_{ij} = 
-\left( \frac{1}{\vert d_i - d_j \vert} \right)^\psi \cdot \left[\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\delta_{0i} \cdot \delta_{0j}}{\delta_{max}} \right]^\chi \text{, where } \vert d_i - d_j \vert \neq 0 \text{ and } \delta_{ij} \neq 0
+\left( \frac{1}{\vert d_i - d_j \vert} \right)^\psi \cdot \left[\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\sqrt{\delta_{0i} \cdot \delta_{0j}}}{\delta_{max}} \right]^\chi \text{, where } \vert d_i - d_j \vert \neq 0 \text{ and } \delta_{ij} \neq 0
 \]
 \\
 
-	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{'}$ for the red edges take the inverse criteria of the visibility of the green edges:
+	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{-1}$ for the red edges take the inverse criteria of the visibility of the green edges:
 \\
 
 \[
-\eta_{ij}^{'} = 
-\left( \vert d_i - d_j \vert \right)^\psi \cdot \left[\left(\delta_{ij}\right)^\omega \cdot \frac{\delta_{max}}{\delta_{0i} \cdot \delta_{0j}} \right]^\chi \text{, where } \delta_{0i} \cdot \delta_{0j} \neq 0 
+\eta_{ij}^{-1} = \frac{1}{\eta_{ij}} =
+\left( \vert d_i - d_j \vert \right)^\psi \cdot \left[\left(\delta_{ij}\right)^\omega \cdot \frac{\delta_{max}}{\sqrt{\delta_{0i} \cdot \delta_{0j}}} \right]^\chi \text{, where } \delta_{0i} \cdot \delta_{0j} \neq 0 
 \]
 \\
 	
-\textit{Explain here the point of the roulette and who it is defined}
+\textit{Explain here the point of the roulette and how it is defined}
 
 \subsection{Algorithms}
 
@@ -235,7 +235,7 @@ P^m_{}ij= \left\{
     		\State Each remaining nodes form an individual group containing only this node
     		\State \textit{/* Construction of the rest of the solution */}
     		\State Use heuristics to construct the rest of the solution
-    		\State Computation of $\underset{i}{\sum} L_i$
+    		\State Computation of $\underset{i}{\sum} T_i$
     		\If{the new solution is better than the best known solution}
     			\State Save the new solution as the new best known solution
     		\EndIf
@@ -247,6 +247,13 @@ P^m_{}ij= \left\{
       \State \textbf{return} Best found solution
   \end{algorithmic}
 \end{algorithm}
+
+\clearpage
+
+	When we have forms the batches of jobs we have to deduce the rest of the solution. In order to do so we will use heuristics. For the flowshop problem we select the order of batch in increasing order of the minimum of the due date of each batch. Each batch is then scheduled following Johnson's algorithm.
+	
+	For the travelling salesman problem we find the sequence of destination of each batch by using the closest neighbour criterion with each subset of jobs formed by our groups.
+
 
 
 \end{document}
