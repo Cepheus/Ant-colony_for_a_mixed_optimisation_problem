@@ -39,94 +39,63 @@ Instance::Instance(string fileName) {
 	init();
 	ifstream file;
 	string line;
+	stringstream ss;
 	file.open(fileName.c_str());
 	char c;
-	string s;
-	int j[MAX_JOBS];
-	int i_j = 0;
-	int a[MAX_JOBS];
-	int i_a = 0;
-	int b[MAX_JOBS];
-	int i_b = 0;
-	int d[MAX_JOBS];
-	int i_d = 0;
-	int k[MAX_JOBS];
-	int i_k = 0;
-	int K[MAX_JOBS][MAX_JOBS];
-	int i_K = 0;
-	int j_K = 0;
+	int id;
+	int a;
+	int b;
+	int d;
+	int k;
 
-	while (getline(file, line)) {
-		stringstream ss(line);
-		ss >> c;
+	getline(file, line);
+	ss.str(line);
+	ss >> c;
+	ss >> n;
 
-		switch (c) {
-		case 'n':
-			ss >> n;
-			break;
-		case 'm':
-			ss >> m;
-			break;
-		case 'j':
-			while (!ss.eof()) {
-				ss >> j[i_j];
-				i_j++;
-			}
-			break;
-		case 'a':
-			while (!ss.eof()) {
-				ss >> a[i_a];
-				i_a++;
-			}
-			break;
-		case 'b':
-			while (!ss.eof()) {
-				ss >> b[i_b];
-				i_b++;
-			}
-			break;
-		case 'd':
-			while (!ss.eof()) {
-				ss >> d[i_d];
-				i_d++;
-			}
-			break;
-		case 'k':
-			while (!ss.eof()) {
-				ss >> k[i_k];
-				i_k++;
-			}
-			break;
-		case 'K':
-			while (getline(file, line)) {
-				stringstream sss(line);
-				j_K = 0;
-				while (!sss.eof()) {
-					sss >> K[i_K][j_K];
-					j_K++;
-				}
-				i_K++;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	file.close();
+	getline(file, line);
+	ss.str(line);
+	ss.clear();
+	ss >> c;
+	ss >> m;
 
 	this->jobs = new Job[n]();
 	this->K = new int*[m];
 	for (int i = 0; i < m; i++)
 		this->K[i] = new int[m];
-	for(int i = 0; i < n; i++) {
-		setJob(j[i],a[i],b[i],d[i],k[i]);
-	}
-	for (int i = 0; i < m; i ++) {
-		for (int j = 0; j < m; j ++) {
-			setK(i,j,K[i][j]);
-		}
-	}
 
+	getline(file, line);
+	do {
+		getline(file, line);
+		ss.str(line);
+		ss.clear();
+		ss >> c;
+		if (c != 'K') {
+			ss.str(line);
+			ss.clear();
+			ss >> id;
+			ss >> a;
+			ss >> b;
+			ss >> d;
+			ss >> k;
+			setJob(id, a, b, d, k);
+		}
+	} while (c != 'K');
+
+	int i = 0;
+	int j;
+	while (getline(file, line)) {
+		ss.str(line);
+		ss.clear();
+		j = 0;
+		while (!ss.eof()) {
+			ss >> k;
+			setK(i, j, k);
+			j++;
+		}
+		i++;
+	}
+	file.close();
 }
 
 Instance::~Instance() {

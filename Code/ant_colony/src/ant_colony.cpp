@@ -16,25 +16,23 @@ using namespace std;
 
 int main() {
 	/* Generator */
-	int n[3] = { 10, 20, 50 };
-	Generator generator(n, 3, 10, 100, 0.5, 0.5);
-	generator.generate("./data");
-
+//	int n[3] = { 10, 20, 50 };
+//	Generator generator(n, 3, 10, 100, 0.5, 0.5);
+//	generator.generate("./data");
 	/* Tester */
 
 	/* Test */
-	/*Heuristics heuristics;
-	 Instance instance("./data/test_02.txt");
-	 //cout << instance;
-	 // Test solution
-	 Solution solution(&instance);
-	 int s[] = { 0, 1, 2 };
-	 int r[] = { 1, 0, 1, 1, 1, 2 };
-	 solution.setS(heuristics.Jonhson(instance.getJobs(), 3, s));
-	 solution.setR(r);
-	 solution.refresh(true);
-	 //cout << solution;
-	 */
+	Heuristics heuristics;
+	Instance instance("./data/test_01.txt");
+	cout << instance;
+	// Test solution
+	Solution solution(&instance);
+	int s[] = { 0, 1, 2 };
+	int r[] = { 1, 0, 1, 1, 1, 2 };
+	solution.setS(heuristics.Jonhson(instance.getJobs(), 3, s));
+	solution.setR(r);
+	solution.refresh(true);
+	cout << solution;
 
 	return 0;
 }

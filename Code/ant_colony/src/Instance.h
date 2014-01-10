@@ -9,8 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-#define MAX_JOBS 100
 #define INSTANCE_H_
 
 using namespace std;
