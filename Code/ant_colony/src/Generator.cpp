@@ -73,7 +73,9 @@ void Generator::generate(string destinationFolder) {
 			}
 			for (int j = 0; j < n[k]+1; j++) {
 				for (int l = 0; l < n[k]+1; l++) {
-					file << distance(x[j], y[j], x[l], y[l]) << "\t";
+					file << distance(x[j], y[j], x[l], y[l]);
+					if(l < n[k])
+						file << "\t";
 				}
 				file << "\n";
 			}
