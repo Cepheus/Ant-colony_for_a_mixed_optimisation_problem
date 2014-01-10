@@ -21,20 +21,19 @@ public:
 
 	/**
 	 * The minimal due date batch scheduling algorithm.
-	 * @param batchs The sequence of batches to be ordered.
+	 * @param batches The sequence of batches to be ordered. Will contain the result at the end of execution.
 	 * @param jobs The jobs.
-	 * @return The ordered sequence of batches following the minimal due date batch scheduling algorithm.
+	 * @param n The size of the array batches.
 	 */
-	int* MinimumDueDateBatch(int* batchs, Job* jobs);
+	void MinimumDueDateBatch(int* batches, Job* jobs, int n);
 
 	/**
 	 * Johnson's algorithm.
 	 * @param jobs The list of jobs to be scheduled.
 	 * @param n The number of jobs to be scheduled.
 	 * @param sequence The array in which we will put the schedule
-	 * @return The scheduled sequence of id of jobs.
 	 */
-	int* Jonhson(Job* jobs, int n, int* sequence);
+	void Jonhson(Job* jobs, int n, int* sequence);
 
 	/**
 	 * The batch heuristic.
