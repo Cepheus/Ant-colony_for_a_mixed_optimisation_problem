@@ -14,13 +14,15 @@
 using namespace std;
 
 int main() {
-	Heuristics heuristics;
+	//Heuristics heuristics;
 
 	// Generate the instance
 	// Find the solution
 
+	Instance instance("./data/test_01.txt");
+
 	// Test instance
-	Instance instance(3,3);
+	/*Instance instance(3,3);
 	instance.setJob(0,1,2,3,1);
 	instance.setJob(1,4,3,7,2);
 	instance.setJob(2,5,5,10,1);
@@ -32,7 +34,7 @@ int main() {
 	instance.setK(1,2,3);
 	instance.setK(2,0,2);
 	instance.setK(2,1,3);
-	instance.setK(2,2,0);
+	instance.setK(2,2,0);*/
 
 	/*int n = 3;
 	int m = 3;
@@ -51,13 +53,13 @@ int main() {
 	cout << instance;
 
 	// Test solution
-	Solution solution(&instance);
+	/*Solution solution(&instance);
 	int s[] = { 0, 1, 2 };
 	int r[] = { 1, 0, 1, 1, 1, 2 };
 	solution.setS(heuristics.Jonhson(instance.getJobs(), 3, s));
 	solution.setR(r);
 	solution.refresh(true);
-	cout << solution;
+	cout << solution;*/
 
 	return 0;
 }

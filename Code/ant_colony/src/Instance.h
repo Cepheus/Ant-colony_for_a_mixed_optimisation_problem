@@ -6,9 +6,13 @@
 
 #ifndef INSTANCE_H_
 #include "Job.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#define MAX_JOBS 100
 #define INSTANCE_H_
 
-#include <iostream>
 using namespace std;
 
 /**
@@ -25,8 +29,11 @@ private:
 	Job* jobs;
 	/** The distance matrix. */
 	int **K;
+	void init();
 public:
+	Instance();
 	Instance(int n, int m);
+	Instance(string  fileName);
 	virtual ~Instance();
 	void print(ostream &flux) const;
 
