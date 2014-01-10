@@ -9,6 +9,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
+#include <time.h>
 #define GENERATOR_H_
 
 using namespace std;
