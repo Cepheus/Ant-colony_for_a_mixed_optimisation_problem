@@ -144,9 +144,57 @@ void Heuristics::Jonhson(Job* jobs, int n, int* sequence) {
 	}
 }
 
-/*int* Heuristics::Batching(Job* jobs) {
+void Heuristics::Batching(Instance *instance, int* s, int* result) {
+	int n = instance->getN();
+	// The current sequence of job.
+	int current_s[n];
+	int i_result;
+	int i_current_s;
+	int batch_start;
+	int min;
+	Solution solution(instance);
 
- }*/
+	// Initialization of result and current_s at 0.
+	for (int i = 0; i < 2 * n; i++) {
+		result[i] = 0;
+		if (i < n)
+			current_s[i] = 0;
+	}
+
+	// We take the first job in the schedule and form a first batch with it.
+	current_s[0] = s[0];
+	i_current_s = 1;
+	result[0] = 1;
+	result[1] = s[0];
+	i_result = 2;
+	batch_start = 1;
+	solution.setS(current_s);
+	solution.setR(result);
+	// For each other job, we see if the SumT is better if we put the next job in the old batch or in a new one.
+	for (int i = 1; i < n; i++) {
+		current_s[i_current_s] = s[i];
+		i_current_s++;
+		instance->setN(i_current_s);
+		result[i_result] = s[i];
+		result[batch_start - 1] = result[batch_start - 1] + 1;
+		solution.refresh(true);
+		min = solution.getT();
+
+		result[batch_start - 1] = result[batch_start - 1] - 1;
+		result[i_result] = 1;
+		result[i_result + 1] = s[i];
+		i_result += 2;
+		solution.refresh(true);
+		if (solution.getT() < min) {
+			batch_start = i_result - 1;
+		} else {
+			i_result--;
+			result[batch_start - 1] = result[batch_start - 1] + 1;
+			result[i_result - 1] = s[i];
+
+		}
+	}
+}
 
 int* Heuristics::NearestNeighbor(int* towns, int** K) {
 	return towns;

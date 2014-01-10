@@ -83,8 +83,8 @@ void Solution::refresh(bool whole) {
 	}
 	T = 0;
 	for (int i = 0; i < n; i++) {
-		jobs[i].setL(jobs[i].getC() - jobs[i].getD());
-		T += std::max(jobs[i].getL(), 0);
+		jobs[s[i]].setL(jobs[s[i]].getC() - jobs[s[i]].getD());
+		T += std::max(jobs[s[i]].getL(), 0);
 	}
 }
 
@@ -126,7 +126,7 @@ void Solution::print(ostream &flux) const {
 	flux << "%v\t" << v*100/jobs[s[n-1]].getC() << "%" << endl;
 	flux << "%w\t" << w*100/jobs[s[n-1]].getC() << "%" << endl;
 
-	flux << "ΣT\t" << T << endl;
+	flux << "SumT\t" << T << endl;
 }
 
 ostream& operator<<(ostream &flux, const Solution& solution) {

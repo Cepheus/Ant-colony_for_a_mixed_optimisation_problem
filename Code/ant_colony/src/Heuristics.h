@@ -6,9 +6,11 @@
  */
 
 #ifndef HEURISTICS_H_
-#include "Job.h"
 #include "Cliste.h"
 #include <climits>
+#include "Job.h"
+#include "Instance.h"
+#include "Solution.h"
 #define HEURISTICS_H_
 
 /** This class contains the tools and heuristics used to find the solution of our problem.
@@ -37,11 +39,11 @@ public:
 
 	/**
 	 * The batch heuristic.
-	 * @param The sequence of id of jobs already scheduled on the flowshop.
-	 * @param The list of jobs.
-	 * @return The batches of id of jobs. (ex: batches found: {1,2}{4}{3}, sequence returned: [2,1,2,1,4,1,3,0])
+	 * @param instance The instance.
+	 * @param s The sequence of id of jobs already scheduled on the flowshop.
+	 * @param r The array of batches of id of jobs. The result of the function. (ex: batches found: {1,2}{4}{3}, sequence returned: [2,1,2,1,4,1,3,0])
 	 */
-	int* Batching(Job* jobs);
+	void Batching(Instance *instance, int* s, int* r);
 
 	/**
 	 * Nearest neighbor algorithm.

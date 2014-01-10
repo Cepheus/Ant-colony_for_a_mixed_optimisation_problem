@@ -31,11 +31,12 @@ int main() {
 	cout << instance;
 	// Test solution
 	Solution solution(&instance);
-	int s[] = { 0, 1, 2 };
-	int r[] = { 1, 0, 1, 2, 1, 1 };
+	int s[instance.getN()];
+	int r[2*instance.getN()];
 	heuristics.Jonhson(instance.getJobs(), instance.getN(), s);
 	solution.setS(s);
-	heuristics.MinimumDueDateBatch(r, instance.getJobs(), instance.getN()*2);
+	heuristics.Batching(&instance, s, r);
+	//heuristics.MinimumDueDateBatch(r, instance.getJobs(), instance.getN()*2);
 	solution.setR(r);
 	solution.refresh(true);
 	cout << solution;
