@@ -68,6 +68,22 @@ public:
 	int getT() const {
 		return T;
 	}
+
+	int getV() const {
+		return v;
+	}
+
+	void setV(int v) {
+		this->v = v;
+	}
+
+	int getW() const {
+		return w;
+	}
+
+	void setW(int w) {
+		this->w = w;
+	}
 };
 
 ostream& operator<<(ostream &flux, const Solution& solution);

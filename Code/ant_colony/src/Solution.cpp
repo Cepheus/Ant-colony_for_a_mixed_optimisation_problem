@@ -1,7 +1,7 @@
 /*
  * Solution.cpp
  *
- *  Created on: 23 d�c. 2013
+ *  Created on: 23 déc. 2013
  *      Author: Caelum
  */
 
@@ -91,42 +91,42 @@ void Solution::refresh(bool whole) {
 void Solution::print(ostream &flux) const {
 	int n = I->getN();
 
-	flux << "s ";
+	flux << "s\t";
 	for (int j = 0; j < n; j++) {
-		flux << s[j] << " ";
+		flux << s[j] << "\t";
 	}
 	flux << endl;
 
-	flux << "r ";
+	flux << "r\t";
 	for (int j = 0; j < n * 2; j++) {
-		flux << r[j] << " ";
+		flux << r[j] << "\t";
 	}
 	flux << endl;
 
-	flux << "c ";
+	flux << "c\t";
 	for (int j = 0; j < n; j++) {
-		flux << jobs[j].getc() << " ";
+		flux << jobs[j].getc() << "\t";
 	}
 	flux << endl;
 
-	flux << "C ";
+	flux << "C\t";
 	for (int j = 0; j < n; j++) {
-		flux << jobs[j].getC() << " ";
+		flux << jobs[j].getC() << "\t";
 	}
 	flux << endl;
 
-	flux << "l ";
+	flux << "l\t";
 	for (int j = 0; j < n; j++) {
-		flux << jobs[j].getL() << " ";
+		flux << jobs[j].getL() << "\t";
 	}
 	flux << endl;
 
-	flux << "v " << v << endl;
-	flux << "w " << w << endl;
-	flux << "%v " << v*100/jobs[s[n-1]].getC() << "%" << endl;
-	flux << "%w " << w*100/jobs[s[n-1]].getC() << "%" << endl;
+	flux << "v\t" << v << endl;
+	flux << "w\t" << w << endl;
+	flux << "%v\t" << v*100/jobs[s[n-1]].getC() << "%" << endl;
+	flux << "%w\t" << w*100/jobs[s[n-1]].getC() << "%" << endl;
 
-	flux << "T " << T << endl;
+	flux << "ΣT\t" << T << endl;
 }
 
 ostream& operator<<(ostream &flux, const Solution& solution) {

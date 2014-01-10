@@ -21,9 +21,9 @@ public:
 
 	/**
 	 * The minimal due date batch scheduling algorithm.
-	 * @param batchs The sequence of batchs to be ordered.
+	 * @param batchs The sequence of batches to be ordered.
 	 * @param jobs The jobs.
-	 * @return The ordered sequence of batchs following the minimal due date batch scheduling algorithm.
+	 * @return The ordered sequence of batches following the minimal due date batch scheduling algorithm.
 	 */
 	int* MinimumDueDateBatch(int* batchs, Job* jobs);
 
@@ -40,7 +40,7 @@ public:
 	 * The batch heuristic.
 	 * @param The sequence of id of jobs already scheduled on the flowshop.
 	 * @param The list of jobs.
-	 * @return The batchs of id of jobs. (ex: batchs found: {1,2}{4}{3}, sequence returned: [2,1,2,1,4,1,3,0])
+	 * @return The batches of id of jobs. (ex: batches found: {1,2}{4}{3}, sequence returned: [2,1,2,1,4,1,3,0])
 	 */
 	int* Batching(Job* jobs);
 
