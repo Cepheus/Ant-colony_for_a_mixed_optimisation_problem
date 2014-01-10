@@ -36,7 +36,9 @@ void Solution::refresh(bool whole) {
 		}
 	}
 
-	date = 0;
+	date = jobs[s[0]].getc();
+	v = 0;
+	w = 0;
 	int i = 0;
 	int k = 0;
 	int max = 0;
@@ -51,6 +53,14 @@ void Solution::refresh(bool whole) {
 			// The truck leaves at the max completion time of the jobs of the group (or last date of arrival of the truck if the date is greater).
 			for (int j = i; j < i + k; j++) {
 				max = std::max(jobs[r[j]].getc(), max);
+			}
+			// The truck waits
+			if(max > date) {
+				v += max - date;
+			}
+			// The jobs wait
+			else if(date > max) {
+				w += date - max;
 			}
 			date = std::max(max, date);
 
@@ -110,6 +120,11 @@ void Solution::print(ostream &flux) const {
 		flux << jobs[j].getL() << " ";
 	}
 	flux << endl;
+
+	flux << "v " << v << endl;
+	flux << "w " << w << endl;
+	flux << "%v " << v*100/jobs[s[n-1]].getC() << "%" << endl;
+	flux << "%w " << w*100/jobs[s[n-1]].getC() << "%" << endl;
 
 	flux << "T " << T << endl;
 }

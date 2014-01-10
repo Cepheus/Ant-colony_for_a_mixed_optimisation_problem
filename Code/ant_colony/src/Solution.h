@@ -26,9 +26,9 @@ private:
 	int *r;
 	/** The sum of lateness, this is our objective function. */
 	int T;
-	/** The number of jobs that waited for the truck. */
+	/** The idle time for the truck. Amount of time the truck waited before shipping. */
 	int v;
-	/** The number of jobs the truck waited to complete. */
+	/** The idle time of jobs. Amount of time the jobs waited before being being shipped. */
 	int w;
 
 public:
