@@ -9,8 +9,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
 #define GENERATOR_H_
 
 using namespace std;
@@ -36,6 +37,8 @@ private:
 	double alpha;
 	/** The value of the parameter gamma. */
 	double gamma;
+	/** Returns the distance between two points. */
+	int distance(int x1, int y1, int x2, int y2);
 };
 
 #endif /* GENERATOR_H_ */
