@@ -22,6 +22,7 @@ Tester::~Tester() {
 
 void Tester::begin() {
 	stringstream fileName;
+	string inputFileName;
 	ifstream inFile;
 	ofstream outFile;
 	DIR * dir = NULL;
@@ -46,7 +47,9 @@ void Tester::begin() {
 		fileName.str("");
 		fileName.clear();
 		fileName << dataFolder << "/" << dirFile->d_name;
-		Instance instance(fileName.str());
+		inputFileName = fileName.str();
+		cout << inputFileName << endl;
+		Instance instance(inputFileName);
 		int n = instance.getN();
 		int s[n];
 		int r[2*n];
@@ -54,8 +57,9 @@ void Tester::begin() {
 		// Prepare output file
 		fileName.str("");
 		fileName.clear();
-		fileName << outputFolder << "/" << outputFilePrefix << "_"
-				<< instance.getN() << "_" << instance_number % 10 + 1 << ".txt";
+		inputFileName.find_last_of("_");
+		fileName << outputFolder << "/" << outputFilePrefix << "_" << instance.getN() << inputFileName.substr(inputFileName.find_last_of("_"));
+		cout << fileName.str() << endl;
 		instance_number++;
 		outFile.open(fileName.str().c_str(), ofstream::out | ofstream::trunc);
 
@@ -73,7 +77,8 @@ void Tester::begin() {
 		}
 		end_time = clock();
 		total_time = (end_time - start_time) / CLOCKS_PER_SEC;
-		outFile << "Time(s)\t" << total_time << endl;
+		cout << start_time << " " << end_time << " " << total_time << endl;
+		outFile << "Time(s)\t" << (double)total_time << endl;
 		outFile << "Solution" << endl;
 		outFile << solution;
 		outFile.close();
