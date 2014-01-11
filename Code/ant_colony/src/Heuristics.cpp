@@ -172,6 +172,7 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 	solution.setR(result);
 	// For each other job, we see if the SumT is better if we put the next job in the old batch or in a new one.
 	for (int i = 1; i < n; i++) {
+		// Same batch
 		current_s[i_current_s] = s[i];
 		i_current_s++;
 		instance->setN(i_current_s);
@@ -180,15 +181,20 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 		solution.refresh(true);
 		min = solution.getT();
 
+		// New batch
 		result[batch_start - 1] = result[batch_start - 1] - 1;
 		result[i_result] = 1;
 		result[i_result + 1] = s[i];
 		i_result += 2;
 		solution.refresh(true);
+		// New batch
 		if (solution.getT() < min) {
 			batch_start = i_result - 1;
-		} else {
+		}
+		// Same batch
+		else {
 			i_result--;
+			result[i_result] = 0;
 			result[batch_start - 1] = result[batch_start - 1] + 1;
 			result[i_result - 1] = s[i];
 
@@ -198,7 +204,7 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 
 void Heuristics::NearestNeighbor(Instance *I, int* r) {
 	int n = I->getN();
-	int result[n];
+	int result[n * 2];
 	int i_result = 0;
 	int i_result_batch_size;
 	bool scheduled[n];
@@ -230,7 +236,8 @@ void Heuristics::NearestNeighbor(Instance *I, int* r) {
 				for (int j = 1; j <= k; j++) {
 					if (!scheduled[r[i_result_batch_size + j]]) {
 						// We take the minimal distance between the last destination and the other destinations
-						destination = I->getJobs()[r[i_result_batch_size + j]].getK();
+						destination =
+								I->getJobs()[r[i_result_batch_size + j]].getK();
 						distance = I->getK(origin, destination);
 						if (distance < min) {
 							min = distance;

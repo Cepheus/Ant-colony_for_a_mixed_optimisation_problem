@@ -17,13 +17,13 @@ using namespace std;
 
 int main() {
 	/* Generator */
-	int n[3] = { 10, 20, 50 };
-	Generator generator(n, 3, 10, 100, 0.5, 0.5);
-	generator.generate("./data");
+//	int n[3] = { 10, 20, 50 };
+//	Generator generator(n, 3, 10, 100, 0.5, 0.5);
+//	generator.generate("./data");
 
 	/* Tester */
-//	Tester tester("./data", "./results", false);
-//	tester.begin();
+	Tester tester("./data", "./results", false);
+	tester.begin();
 
 	/* Test */
 //	Heuristics heuristics;

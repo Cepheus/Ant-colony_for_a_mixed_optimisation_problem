@@ -46,7 +46,6 @@ void Tester::begin() {
 		fileName.str("");
 		fileName.clear();
 		fileName << dataFolder << "/" << dirFile->d_name;
-		cout << fileName.str() << endl;
 		Instance instance(fileName.str());
 		int n = instance.getN();
 		int s[n];
