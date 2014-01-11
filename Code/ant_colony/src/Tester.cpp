@@ -46,6 +46,7 @@ void Tester::begin() {
 		fileName.str("");
 		fileName.clear();
 		fileName << dataFolder << "/" << dirFile->d_name;
+		cout << fileName.str() << endl;
 		Instance instance(fileName.str());
 		int n = instance.getN();
 		int s[n];
@@ -66,6 +67,10 @@ void Tester::begin() {
 		} else {
 			heuristics.Jonhson(instance.getJobs(), n, s);
 			solution.setS(s);
+			heuristics.Batching(&instance, s, r);
+			heuristics.NearestNeighbor(&instance, r);
+			solution.setR(r);
+			solution.refresh(true);
 		}
 		end_time = clock();
 		total_time = (end_time - start_time) / CLOCKS_PER_SEC;

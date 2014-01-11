@@ -54,7 +54,7 @@ void Generator::generate(string destinationFolder) {
 			file << "j\t" << "a\t" << "b\t" << "d\t" << "k\n";
 			// We generate n jobs.
 			for (int j = 0; j < n[k]; j++) {
-				destination[j] = rand() % (n[k] + 1) + 1;
+				destination[j] = rand() % (n[k] + 1);
 				file << j << "\t"
 						<< rand() % p_max + 1 << "\t"
 						// a: [1,100]
