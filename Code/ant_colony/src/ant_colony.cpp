@@ -32,10 +32,12 @@ int main() {
 	// Test solution
 	Solution solution(&instance);
 	int s[instance.getN()];
+	//int r[6] = {1,0,2,1,2,0};
 	int r[2*instance.getN()];
 	heuristics.Jonhson(instance.getJobs(), instance.getN(), s);
 	solution.setS(s);
 	heuristics.Batching(&instance, s, r);
+	heuristics.NearestNeighbor(&instance, r);
 	//heuristics.MinimumDueDateBatch(r, instance.getJobs(), instance.getN()*2);
 	solution.setR(r);
 	solution.refresh(true);

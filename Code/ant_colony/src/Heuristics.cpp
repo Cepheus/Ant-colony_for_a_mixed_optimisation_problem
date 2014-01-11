@@ -196,6 +196,60 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 	}
 }
 
-int* Heuristics::NearestNeighbor(int* towns, int** K) {
-	return towns;
+void Heuristics::NearestNeighbor(Instance *I, int* r) {
+	int n = I->getN();
+	int result[n];
+	int i_result = 0;
+	int i_result_batch_size;
+	bool scheduled[n];
+	// Initialization of scheduled at false and result at 0
+	for (int i = 0; i < n * 2; i++) {
+		if (i < n)
+			scheduled[i] = false;
+		result[i] = 0;
+	}
+	int min;
+	int i_min;
+	int k;
+	int origin, destination;
+	int distance;
+	int i = 0;
+	// For each batch
+	while (i < n * 2) {
+		k = r[i];
+		if (k == 0) {
+			i = n * 2;
+		} else {
+			i_result_batch_size = i_result;
+			i_result++;
+			// While we haven't scheduled all the jobs of the batch
+			while (result[i_result_batch_size] < k) {
+				min = INT_MAX;
+				origin = 0;
+				// We search each job of the batch
+				for (int j = 1; j <= k; j++) {
+					if (!scheduled[r[i_result_batch_size + j]]) {
+						// We take the minimal distance between the last destination and the other destinations
+						destination = I->getJobs()[r[i_result_batch_size + j]].getK();
+						distance = I->getK(origin, destination);
+						if (distance < min) {
+							min = distance;
+							i_min = i_result_batch_size + j;
+						}
+					}
+				}
+				origin = I->getJobs()[r[i_min]].getK();
+				result[i_result] = r[i_min];
+				result[i_result_batch_size]++;
+				scheduled[r[i_min]] = true;
+				i_result++;
+			}
+			i += k + 1;
+		}
+	}
+
+// We copy result into the return array
+	for (int i = 0; i < n * 2; i++) {
+		r[i] = result[i];
+	}
 }

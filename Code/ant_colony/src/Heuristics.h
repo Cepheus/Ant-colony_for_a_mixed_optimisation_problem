@@ -47,11 +47,11 @@ public:
 
 	/**
 	 * Nearest neighbor algorithm.
-	 * @param towns The list of towns to be scheduled.
-	 * @param K The distance matrix.
-	 * @return The sequence of id of towns ordered following the nearest neighbor algorithm.
+	 * This function scheduled the jobs of the batches passed in parameter following the NN algo.
+	 * @param I The instance.
+	 * @param r The array of batches of id of jobs. The result of the function. (ex: Input batches {0}{12}, Output of algo [10221] if k02 < k01)
 	 */
-	int* NearestNeighbor(int* towns, int** K);
+	void NearestNeighbor(Instance *I, int* r);
 
 };
 
