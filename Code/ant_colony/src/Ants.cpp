@@ -114,7 +114,6 @@ void Ants::begin(int *r) {
 	srand(time(NULL));
 	// tabu[0] == True: job 0 is tabu, should not be considered.
 	bool tabu[n];
-	bool placed[n];
 	int start;
 	int end;
 	char color;
@@ -138,7 +137,6 @@ void Ants::begin(int *r) {
 			// Init tabu list at false
 			for (int j = 0; j < n; j++) {
 				tabu[j] = false;
-				placed[n] = false;
 			}
 			// We choose a random job as start point.
 			start = rand() % n;
@@ -149,7 +147,7 @@ void Ants::begin(int *r) {
 				sum_green = sum_red = 0;
 				// We get the proba to do classic P or roulette P
 				// We do classic P
-				if (rand() / RAND_MAX > diversification_probability) {
+				if ((double)rand() / RAND_MAX > diversification_probability) {
 					// We get the sum of (pheromone_startj)^alpha * (visibility_startj)^beta where j not in tabu.
 					// For both green and red
 					for (int j = 0; j < n; j++) {
@@ -164,21 +162,21 @@ void Ants::begin(int *r) {
 					for (int j = 0; j < n; j++) {
 						if (!tabu[j]) {
 							p_green[j] = pow(pheromone_green[start][j], alpha)
-									* pow(visibility_green[start][j], beta);
+									* pow(visibility_green[start][j], beta) / sum_green;
 							p_red[j] = pow(pheromone_red[start][j], alpha)
-									* pow(visibility_red[start][j], beta);
+									* pow(visibility_red[start][j], beta) / sum_red;
 						} else
 							p_green[j] = p_red[j] = 0;
 					}
 					max = INT_MIN;
 					// We search for the highest probability.
 					for (int j = 0; j < n; j++) {
-						if (p_green[j] > max) {
+						if (p_green[j] > max && !tabu[j]) {
 							max = p_green[j];
 							max_i = j;
 							max_c = 'g';
 						}
-						if (p_red[j] > max) {
+						if (p_red[j] > max && !tabu[j]) {
 							max = p_red[j];
 							max_i = j;
 							max_c = 'r';
@@ -191,6 +189,7 @@ void Ants::begin(int *r) {
 				// We do roulette P
 				else {
 					int j = 0;
+					double cumul = 0;
 					// We get the first non-tabu node.
 					while (tabu[j] && j < n) {
 						j++;
@@ -198,34 +197,45 @@ void Ants::begin(int *r) {
 					}
 					// And give its p the initial pheromone value.
 					p_green[j] = pheromone_green[start][j];
-					p_red[j] = p_green[j] + pheromone_red[start][j];
+					cumul = p_red[j] = p_green[j] + pheromone_red[start][j];
+					int last_j = j;
 					// We compute the cumul of pheromone value
 					for (j = j + 1; j < n; j++) {
 						if (!tabu[j]) {
-							p_green[j] = p_red[j - 1]
+							p_green[j] = p_red[last_j]
 									+ pheromone_green[start][j];
-							p_red[j] = p_green[j] + pheromone_red[start][j];
+							cumul = p_red[j] = p_green[j]
+									+ pheromone_red[start][j];
+							last_j = j;
 						} else
 							p_green[j] = p_red[j] = 0;
 					}
 					// We pull a random number between 0 and the cumul of pheromone.
-					max = rand() % (int)p_red[n - 1];
-					j = 0;
-					while ((p_green[j] < max || p_red[j] < max) && !tabu[j]) {
-						if (p_green[j] >= max) {
-							end = j;
-							color = 'c';
-						} else if (p_red[j] >= max) {
-							end = j;
-							color = 'r';
+					max = (double) rand() / RAND_MAX * cumul;
+					j = -1;
+					do {
+						j++;
+						if (!tabu[j]) {
+							if (p_green[j] >= max) {
+								end = j;
+								color = 'g';
+							} else if (p_red[j] >= max) {
+								end = j;
+								color = 'r';
+							}
 						}
-					}
+					} while (tabu[j] || (p_green[j] < max && p_red[j] < max));
 				}
 				edge_start[e] = start;
 				edge_end[e] = end;
 				edge_color[e] = color;
 				start = end;
 				tabu[start] = true;
+			}
+
+			// Init r_found with 0.
+			for(int j = 0; j < n*2; j++) {
+				r_found[j] = 0;
 			}
 			int r_i;
 			int batch_size_i = 0;
