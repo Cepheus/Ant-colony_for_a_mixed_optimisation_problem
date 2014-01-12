@@ -10,8 +10,10 @@
 #include <climits>
 #include <ctime>
 #include <cstdlib>
+#include "Job.h"
 #include "Instance.h"
 #include "Solution.h"
+#include "Heuristics.h"
 #define ZERO 0.00001
 #define ANTS_H_
 
@@ -28,9 +30,10 @@ public:
 
 	/**
 	 * Launches the ant colony heuristic.
+	 * @param s The output array. Contains the sequence of jobs formed by the colony at the end of the execution.
 	 * @param r The output array. Contains the batches formed by the colony at the end of the execution.
 	 */
-	void begin(int *r);
+	void begin(int* s, int *r);
 private:
 
 	/** The instance. */

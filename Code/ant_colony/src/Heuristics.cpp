@@ -27,10 +27,13 @@ void Heuristics::MinimumDueDateBatch(int* batches, Job* jobs, int n) {
 	int i;
 	int k;
 	// Initialization of min, size_batch and scheduled
-	for (int i = 0; i < n / 2; i++) {
-		min[i] = INT_MAX;
-		size_batch[i] = 0;
-		scheduled[i] = false;
+	for (int i = 0; i < n; i++) {
+		if (i < n / 2) {
+			min[i] = INT_MAX;
+			size_batch[i] = 0;
+			scheduled[i] = false;
+		}
+		result[i] = 0;
 	}
 	i = 0;
 	// For each batch
@@ -65,7 +68,7 @@ void Heuristics::MinimumDueDateBatch(int* batches, Job* jobs, int n) {
 		all_scheduled = true;
 		min_all = INT_MAX;
 		// For each batch
-		for (i = 0; i < i_batch; i++) {
+		for (i = 0; i <= i_batch; i++) {
 			if (!scheduled[i]) {
 				all_scheduled = false;
 				// We search for the minimal value within the min(d) of the batches.

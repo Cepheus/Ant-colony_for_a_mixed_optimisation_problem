@@ -35,7 +35,7 @@ int main() {
 	int s[instance.getN()];
 	int r[2 * instance.getN()];
 	Ants ants(&instance, 50, 10, 0.2, 0.1, 0.1, 1, 1, 1, 1, 1);
-	ants.begin(r);
+	ants.begin(s, r);
 	cout << ants << endl;
 	//solution.setS(s);
 	//solution.setR(r);

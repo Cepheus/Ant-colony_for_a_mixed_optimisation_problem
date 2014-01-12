@@ -49,7 +49,7 @@ Ants::~Ants() {
 	delete[] visibility_red;
 }
 
-void Ants::begin(int *r) {
+void Ants::begin(int *s, int *r) {
 	int distance_max = INT_MIN;
 	for (int i = 1; i < I->getM(); i++) {
 		if (I->getK(0, i) > distance_max) {
@@ -129,8 +129,15 @@ void Ants::begin(int *r) {
 	char max_c;
 	int s_found[n];
 	int r_found[n * 2];
+	int s_best_ant[n];
+	int r_best_ant[n * 2];
+	int s_best[n];
+	int r_best[n * 2];
 	Solution solution(I);
+	Solution best_ant(I);
 	Solution best(I);
+	Heuristics heuristics;
+	Job jobs_jonhson[n];
 	for (int i = 0; i < iteration_number; i++) {
 		for (int m = 0; m < ant_number; m++) {
 			/* Construct solution */
@@ -147,7 +154,7 @@ void Ants::begin(int *r) {
 				sum_green = sum_red = 0;
 				// We get the proba to do classic P or roulette P
 				// We do classic P
-				if ((double)rand() / RAND_MAX > diversification_probability) {
+				if ((double) rand() / RAND_MAX > diversification_probability) {
 					// We get the sum of (pheromone_startj)^alpha * (visibility_startj)^beta where j not in tabu.
 					// For both green and red
 					for (int j = 0; j < n; j++) {
@@ -162,9 +169,11 @@ void Ants::begin(int *r) {
 					for (int j = 0; j < n; j++) {
 						if (!tabu[j]) {
 							p_green[j] = pow(pheromone_green[start][j], alpha)
-									* pow(visibility_green[start][j], beta) / sum_green;
+									* pow(visibility_green[start][j], beta)
+									/ sum_green;
 							p_red[j] = pow(pheromone_red[start][j], alpha)
-									* pow(visibility_red[start][j], beta) / sum_red;
+									* pow(visibility_red[start][j], beta)
+									/ sum_red;
 						} else
 							p_green[j] = p_red[j] = 0;
 					}
@@ -234,7 +243,7 @@ void Ants::begin(int *r) {
 			}
 
 			// Init r_found with 0.
-			for(int j = 0; j < n*2; j++) {
+			for (int j = 0; j < n * 2; j++) {
 				r_found[j] = 0;
 			}
 			int r_i;
@@ -243,6 +252,7 @@ void Ants::begin(int *r) {
 			r_found[1] = edge_start[0];
 			r_i = 2;
 			// We form the array r from the edges found by the ant.
+			// Also we do the local pheromone update.
 			for (int e = 0; e < n - 1; e++) {
 				// Add to existing batch.
 				if (edge_color[e] == 'g') {
@@ -256,7 +266,47 @@ void Ants::begin(int *r) {
 				}
 				r_found[r_i] = edge_end[e];
 				r_i++;
+
+				// Local pheromone update
+				if (edge_color[e] == 'g') {
+					pheromone_green[edge_start[e]][edge_end[e]] = (1 - rho)
+							* pheromone_green[edge_start[e]][edge_end[e]]
+							+ rho * initial_pheromone_value;
+					pheromone_green[edge_end[e]][edge_start[e]] =
+							pheromone_green[edge_start[e]][edge_end[e]];
+				} else {
+					pheromone_red[edge_start[e]][edge_end[e]] = (1 - rho)
+							* pheromone_red[edge_start[e]][edge_end[e]]
+							+ rho * initial_pheromone_value;
+					pheromone_red[edge_end[e]][edge_start[e]] =
+							pheromone_red[edge_start[e]][edge_end[e]];
+				}
 			}
+			/* Use of heuristics to form the rest of the solution */
+			// Order the batches by increasing order of minimum due date.
+			heuristics.MinimumDueDateBatch(r_found, I->getJobs(), n * 2);
+			// For each batch we apply Jonhson.
+			int k;
+			int nb_done = 0;
+			int j = 0;
+			while (j < n * 2) {
+				k = r_found[j];
+				if (k == 0) {
+					j = n * 2;
+				} else {
+					// We make a new list of jobs in order of array r_found.
+					for (int l = 0; l < k; l++) {
+						jobs_jonhson[nb_done + l] = I->getJob(
+								r_found[j + 1 + l]);
+					}
+					heuristics.Jonhson(jobs_jonhson + nb_done, k,
+							s_found + nb_done);
+					nb_done += k;
+					j += k + 1;
+				}
+			}
+			// We apply the nearest neighbor for the jobs of the batches.
+			heuristics.NearestNeighbor(I, r_found);
 		}
 	}
 

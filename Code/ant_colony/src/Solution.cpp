@@ -14,6 +14,7 @@ Solution::Solution(Instance * I) {
 	setI(I);
 	v = 0;
 	w = 0;
+	T = INT_MAX;
 }
 
 Solution::~Solution() {
