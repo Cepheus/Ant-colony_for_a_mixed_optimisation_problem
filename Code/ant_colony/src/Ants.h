@@ -8,6 +8,7 @@
 #ifndef ANTS_H_
 #include <cmath>
 #include <climits>
+#include <ctime>
 #include "Instance.h"
 #define ZERO 0.00001
 #define ANTS_H_
@@ -17,7 +18,7 @@
  */
 class Ants {
 public:
-	Ants(Instance *I, int iteration_number, int ant_number,
+	Ants(Instance *I, int iteration_number, int ant_number, double diversification_probability,
 			double initial_pheromone_value, double rho, double alpha,
 			double beta, double psi, double omega, double chi);
 	virtual ~Ants();
@@ -37,6 +38,7 @@ private:
 
 	int iteration_number;
 	int ant_number;
+	double diversification_probability;
 	double initial_pheromone_value;
 
 	/** Evaporation rate. */
