@@ -9,7 +9,9 @@
 #include <cmath>
 #include <climits>
 #include <ctime>
+#include <cstdlib>
 #include "Instance.h"
+#include "Solution.h"
 #define ZERO 0.00001
 #define ANTS_H_
 

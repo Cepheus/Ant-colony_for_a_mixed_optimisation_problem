@@ -149,7 +149,7 @@ void Ants::begin(int *r) {
 				sum_green = sum_red = 0;
 				// We get the proba to do classic P or roulette P
 				// We do classic P
-				if (rand() % 1 > diversification_probability) {
+				if (rand() / RAND_MAX > diversification_probability) {
 					// We get the sum of (pheromone_startj)^alpha * (visibility_startj)^beta where j not in tabu.
 					// For both green and red
 					for (int j = 0; j < n; j++) {
@@ -164,7 +164,7 @@ void Ants::begin(int *r) {
 					for (int j = 0; j < n; j++) {
 						if (!tabu[j]) {
 							p_green[j] = pow(pheromone_green[start][j], alpha)
-									* pow(visibility_green[start], beta);
+									* pow(visibility_green[start][j], beta);
 							p_red[j] = pow(pheromone_red[start][j], alpha)
 									* pow(visibility_red[start][j], beta);
 						} else
@@ -204,12 +204,12 @@ void Ants::begin(int *r) {
 						if (!tabu[j]) {
 							p_green[j] = p_red[j - 1]
 									+ pheromone_green[start][j];
-							p_red = p_green[j] + pheromone_red[start][j];
+							p_red[j] = p_green[j] + pheromone_red[start][j];
 						} else
 							p_green[j] = p_red[j] = 0;
 					}
 					// We pull a random number between 0 and the cumul of pheromone.
-					max = rand() % p_red[n - 1];
+					max = rand() % (int)p_red[n - 1];
 					j = 0;
 					while ((p_green[j] < max || p_red[j] < max) && !tabu[j]) {
 						if (p_green[j] >= max) {
