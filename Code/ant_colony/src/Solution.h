@@ -20,6 +20,8 @@ private:
 	Instance* I;
 	/** The list of jobs. */
 	Job *jobs;
+	/** The number of jobs. */
+	int n;
 	/** The sequence of jobs for the flowshop problem. */
 	int *s;
 	/** The array containing the groups of jobs to be delivered as well as they delivery order (see report). */
@@ -31,10 +33,14 @@ private:
 	/** The idle time of jobs. Amount of time the jobs waited before being being shipped. */
 	int w;
 
+	void init();
+
 public:
+	Solution();
 	Solution(Instance*);
 	virtual ~Solution();
 	void print(ostream &flux) const;
+	Solution& operator= (const Solution& solution);
 
 	/** Does the calculations of the solution.
 	 *  @param whole True is the function must refresh the whole solution. False is we must only refresh from the array t.
@@ -83,6 +89,10 @@ public:
 
 	void setW(int w) {
 		this->w = w;
+	}
+
+	int getN() const {
+		return n;
 	}
 };
 

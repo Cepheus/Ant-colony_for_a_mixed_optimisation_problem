@@ -57,6 +57,8 @@ void Heuristics::MinimumDueDateBatch(int* batches, Job* jobs, int n) {
 			i_batch++;
 		}
 	}
+	if(i_batch == n / 2)
+		i_batch--;
 
 	int min_all;
 	int i_min;

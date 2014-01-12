@@ -7,9 +7,25 @@
 
 #include "Solution.h"
 
+void Solution::init() {
+	s = NULL;
+	r = NULL;
+	I = NULL;
+	n = 0;
+	v = 0;
+	w = 0;
+	T = INT_MAX;
+}
+
+Solution::Solution() {
+	init();
+}
+
 Solution::Solution(Instance * I) {
-	this->s = new int[I->getN()];
-	this->r = new int[I->getN() * 2];
+	init();
+	this->n = I->getN();
+	this->s = new int[n];
+	this->r = new int[n];
 	this->jobs = I->getJobs();
 	setI(I);
 	v = 0;
@@ -18,13 +34,14 @@ Solution::Solution(Instance * I) {
 }
 
 Solution::~Solution() {
-	delete s;
-	delete r;
+//	if (s != NULL)
+//		delete s;
+//	if (r != NULL)
+//		delete r;
 }
 
 void Solution::refresh(bool whole) {
 	// Date for M1
-	int n = I->getN();
 	int date = 0;
 	if (whole == true) {
 		// For each job of the sequence s we compute the completion times of the flowshop
@@ -56,11 +73,11 @@ void Solution::refresh(bool whole) {
 				max = std::max(jobs[r[j]].getc(), max);
 			}
 			// The truck waits
-			if(max > date) {
+			if (max > date) {
 				v += max - date;
 			}
 			// The jobs wait
-			else if(date > max) {
+			else if (date > max) {
 				w += date - max;
 			}
 			date = std::max(max, date);
@@ -90,7 +107,6 @@ void Solution::refresh(bool whole) {
 }
 
 void Solution::print(ostream &flux) const {
-	int n = I->getN();
 
 	flux << "s\t";
 	for (int j = 0; j < n; j++) {
@@ -124,10 +140,33 @@ void Solution::print(ostream &flux) const {
 
 	flux << "v\t" << v << endl;
 	flux << "w\t" << w << endl;
-	flux << "%v\t" << v*100/jobs[s[n-1]].getC() << "%" << endl;
-	flux << "%w\t" << w*100/jobs[s[n-1]].getC() << "%" << endl;
+	flux << "%v\t" << v * 100 / jobs[s[n - 1]].getC() << "%" << endl;
+	flux << "%w\t" << w * 100 / jobs[s[n - 1]].getC() << "%" << endl;
 
 	flux << "SumT\t" << T << endl;
+}
+
+Solution& Solution::operator=(const Solution& solution) {
+	if (n != solution.getN()) {
+		if (s != NULL)
+			delete s;
+		if (r != NULL)
+			delete r;
+		n = solution.getN();
+		s = new int[n];
+		r = new int[n * 2];
+	}
+	I = (Instance*) solution.getI();
+	this->jobs = I->getJobs();
+	v = solution.getV();
+	w = solution.getW();
+	T = solution.getT();
+	for (int i = 0; i < n * 2; i++) {
+		if (i < n)
+			s[i] = solution.getS()[i];
+		r[i] = solution.getR()[i];
+	}
+	return *this;
 }
 
 ostream& operator<<(ostream &flux, const Solution& solution) {

@@ -28,7 +28,7 @@ Ants::Ants(Instance *I, int iteration_number, int ant_number,
 	this->pheromone_red = new double*[n]();
 	this->visibility_green = new double*[n]();
 	this->visibility_red = new double*[n]();
-	for (int i = 0; i < I->getN(); i++) {
+	for (int i = 0; i < n; i++) {
 		pheromone_green[i] = new double[n];
 		pheromone_red[i] = new double[n];
 		visibility_green[i] = new double[n];
@@ -120,6 +120,9 @@ void Ants::begin(int *s, int *r) {
 	int edge_start[n - 1];
 	int edge_end[n - 1];
 	char edge_color[n - 1];
+	int edge_best_ant_start[n - 1];
+	int edge_best_ant_end[n - 1];
+	char edge_best_ant_color[n - 1];
 	double sum_green;
 	double sum_red;
 	double p_green[n];
@@ -133,11 +136,20 @@ void Ants::begin(int *s, int *r) {
 	int r_best_ant[n * 2];
 	int s_best[n];
 	int r_best[n * 2];
-	Solution solution(I);
+	Solution current_solution(I);
 	Solution best_ant(I);
 	Solution best(I);
 	Heuristics heuristics;
 	Job jobs_jonhson[n];
+	int bestT = INT_MAX;
+	double deltaT = initial_pheromone_value;
+	// We set the pointers of the differents solutions we will store
+	current_solution.setS(s_found);
+	current_solution.setR(r_found);
+	best_ant.setS(s_best_ant);
+	best_ant.setR(r_best_ant);
+	best.setS(s_best);
+	best.setR(r_best);
 	for (int i = 0; i < iteration_number; i++) {
 		for (int m = 0; m < ant_number; m++) {
 			/* Construct solution */
@@ -307,9 +319,49 @@ void Ants::begin(int *s, int *r) {
 			}
 			// We apply the nearest neighbor for the jobs of the batches.
 			heuristics.NearestNeighbor(I, r_found);
-		}
-	}
 
+			// We keep the best ant.
+			current_solution.refresh(true);
+			if (current_solution.getT() < best_ant.getT()) {
+				best_ant = current_solution;
+				for (int j = 0; j < n - 1; j++) {
+					edge_best_ant_start[j] = edge_start[j];
+					edge_best_ant_end[j] = edge_end[j];
+					edge_best_ant_color[j] = edge_color[j];
+				}
+			}
+		} // end for ants
+
+		/* Global pheromone update. */
+		// We update the pheromone matrix with the % of amelioration of the solution on the edges, the ant visited.
+		// We keep the best from the best ants.
+		if (best_ant.getT() < best.getT()) {
+			if (bestT != INT_MAX) {
+				deltaT = bestT - best_ant.getT() / bestT;
+			}
+			for (int e = 0; e < n - 1; e++) {
+				if (edge_best_ant_color[e] == 'g') {
+					pheromone_green[edge_best_ant_start[e]][edge_best_ant_end[e]] +=
+							deltaT;
+					pheromone_green[edge_best_ant_end[e]][edge_best_ant_start[e]] +=
+							deltaT;
+				} else {
+					pheromone_red[edge_best_ant_start[e]][edge_best_ant_end[e]] +=
+							deltaT;
+					pheromone_red[edge_best_ant_end[e]][edge_best_ant_start[e]] +=
+												deltaT;
+				}
+			}
+			best = best_ant;
+		}
+
+	} // end for interations
+	// We copy the best found solution into the return arrays.
+	for (int j = 0; j < n * 2; j++) {
+		if (j < n)
+			s[j] = s_best[j];
+		r[j] = r_best[j];
+	}
 }
 
 void Ants::print(ostream &flux) const {

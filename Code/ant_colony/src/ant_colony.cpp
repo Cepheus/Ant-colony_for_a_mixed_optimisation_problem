@@ -24,23 +24,23 @@ int main() {
 //	generator.generate("./data");
 
 	/* Tester */
-//	Tester tester("./data", "./results", false);
-//	tester.begin();
+	Tester tester("./data", "./results", false);
+	tester.begin();
 
 	/* Test */
-	Instance instance("./test/test_02.txt");
-	cout << instance;
-	// Test solution
-	Solution solution(&instance);
-	int s[instance.getN()];
-	int r[2 * instance.getN()];
-	Ants ants(&instance, 50, 10, 0.2, 0.1, 0.1, 1, 1, 1, 1, 1);
-	ants.begin(s, r);
-	cout << ants << endl;
-	//solution.setS(s);
-	//solution.setR(r);
-	//solution.refresh(true);
-	//cout << solution;
+//	Instance instance("./test/test_3.txt");
+//	cout << instance;
+//	// Test solution
+//	Solution solution(&instance);
+//	int s[instance.getN()];
+//	int r[2 * instance.getN()];
+//	Ants ants(&instance, 50, 10, 0.2, 0.1, 0.1, 1, 1, 1, 1, 1);
+//	ants.begin(s, r);
+//	//cout << ants << endl;
+//	solution.setS(s);
+//	solution.setR(r);
+//	solution.refresh(true);
+//	cout << solution;
 
 	return 0;
 }

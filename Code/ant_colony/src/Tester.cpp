@@ -27,7 +27,8 @@ void Tester::begin() {
 	ofstream outFile;
 	DIR * dir = NULL;
 	struct dirent* dirFile = NULL;
-	clock_t start_time, end_time, total_time;
+	clock_t start_time, end_time;
+	double total_time;
 	Heuristics heuristics;
 	int instance_number = 0;
 
@@ -66,7 +67,11 @@ void Tester::begin() {
 		// Execution
 		start_time = clock();
 		if (useAnts) {
-			// Ants
+			Ants ants(&instance, 50, 10, 0.2, 0.1, 0.1, 1, 1, 1, 1, 1);
+			ants.begin(s, r);
+			solution.setS(s);
+			solution.setR(r);
+			solution.refresh(true);
 		} else {
 			heuristics.Jonhson(instance.getJobs(), n, s);
 			solution.setS(s);
@@ -76,7 +81,7 @@ void Tester::begin() {
 			solution.refresh(true);
 		}
 		end_time = clock();
-		total_time = (end_time - start_time) / CLOCKS_PER_SEC;
+		total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 		cout << start_time << " " << end_time << " " << total_time << endl;
 		outFile << "Time(s)\t" << (double)total_time << endl;
 		outFile << "Solution" << endl;

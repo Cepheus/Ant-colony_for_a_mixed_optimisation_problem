@@ -17,6 +17,7 @@
 #include "Instance.h"
 #include "Solution.h"
 #include "Heuristics.h"
+#include "Ants.h"
 #define TESTER_H_
 
 using namespace std;
