@@ -24,7 +24,7 @@ int main() {
 //	generator.generate("./data");
 
 	/* Tester */
-	Tester tester("./data", "./results", false);
+	Tester tester("./data", "./results", true);
 	tester.begin();
 
 	/* Test */

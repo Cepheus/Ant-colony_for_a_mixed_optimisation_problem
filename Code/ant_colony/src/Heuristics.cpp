@@ -152,12 +152,14 @@ void Heuristics::Jonhson(Job* jobs, int n, int* sequence) {
 void Heuristics::Batching(Instance *instance, int* s, int* result) {
 	int n = instance->getN();
 	// The current sequence of job.
-	int current_s[n];
+	int *current_s;
 	int i_result;
 	int i_current_s;
 	int batch_start;
 	int min;
 	Solution solution(instance);
+	current_s = solution.getS();
+	solution.setR(result);
 
 	// Initialization of result and current_s at 0.
 	for (int i = 0; i < 2 * n; i++) {
@@ -173,8 +175,6 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 	result[1] = s[0];
 	i_result = 2;
 	batch_start = 1;
-	solution.setS(current_s);
-	solution.setR(result);
 	// For each other job, we see if the SumT is better if we put the next job in the old batch or in a new one.
 	for (int i = 1; i < n; i++) {
 		// Same batch

@@ -52,9 +52,11 @@ void Tester::begin() {
 		cout << inputFileName << endl;
 		Instance instance(inputFileName);
 		int n = instance.getN();
-		int s[n];
-		int r[2*n];
+		int *s;
+		int *r;
 		Solution solution(&instance);
+		s = solution.getS();
+		r = solution.getR();
 		// Prepare output file
 		fileName.str("");
 		fileName.clear();
@@ -69,15 +71,11 @@ void Tester::begin() {
 		if (useAnts) {
 			Ants ants(&instance, 50, 10, 0.2, 0.1, 0.1, 1, 1, 1, 1, 1);
 			ants.begin(s, r);
-			solution.setS(s);
-			solution.setR(r);
 			solution.refresh(true);
 		} else {
 			heuristics.Jonhson(instance.getJobs(), n, s);
-			solution.setS(s);
 			heuristics.Batching(&instance, s, r);
 			heuristics.NearestNeighbor(&instance, r);
-			solution.setR(r);
 			solution.refresh(true);
 		}
 		end_time = clock();

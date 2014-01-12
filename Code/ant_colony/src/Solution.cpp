@@ -11,6 +11,7 @@ void Solution::init() {
 	s = NULL;
 	r = NULL;
 	I = NULL;
+	jobs = NULL;
 	n = 0;
 	v = 0;
 	w = 0;
@@ -25,19 +26,24 @@ Solution::Solution(Instance * I) {
 	init();
 	this->n = I->getN();
 	this->s = new int[n];
-	this->r = new int[n];
+	this->r = new int[n*2];
 	this->jobs = I->getJobs();
 	setI(I);
 	v = 0;
 	w = 0;
 	T = INT_MAX;
+	for (int i = 0; i < n * 2; i++) {
+		if (i < n)
+			s[i] = 0;
+		r[i] = 0;
+	}
 }
 
 Solution::~Solution() {
-//	if (s != NULL)
-//		delete s;
-//	if (r != NULL)
-//		delete r;
+	if (s != NULL)
+		delete s;
+	if (r != NULL)
+		delete r;
 }
 
 void Solution::refresh(bool whole) {

@@ -130,12 +130,8 @@ void Ants::begin(int *s, int *r) {
 	double max;
 	int max_i;
 	char max_c;
-	int s_found[n];
-	int r_found[n * 2];
-	int s_best_ant[n];
-	int r_best_ant[n * 2];
-	int s_best[n];
-	int r_best[n * 2];
+	int *s_found;
+	int *r_found;
 	Solution current_solution(I);
 	Solution best_ant(I);
 	Solution best(I);
@@ -144,12 +140,8 @@ void Ants::begin(int *s, int *r) {
 	int bestT = INT_MAX;
 	double deltaT = initial_pheromone_value;
 	// We set the pointers of the differents solutions we will store
-	current_solution.setS(s_found);
-	current_solution.setR(r_found);
-	best_ant.setS(s_best_ant);
-	best_ant.setR(r_best_ant);
-	best.setS(s_best);
-	best.setR(r_best);
+	s_found = current_solution.getS();
+	r_found = current_solution.getR();
 	for (int i = 0; i < iteration_number; i++) {
 		for (int m = 0; m < ant_number; m++) {
 			/* Construct solution */
@@ -359,8 +351,8 @@ void Ants::begin(int *s, int *r) {
 	// We copy the best found solution into the return arrays.
 	for (int j = 0; j < n * 2; j++) {
 		if (j < n)
-			s[j] = s_best[j];
-		r[j] = r_best[j];
+			s[j] = best.getS()[j];
+		r[j] = best.getR()[j];
 	}
 }
 
