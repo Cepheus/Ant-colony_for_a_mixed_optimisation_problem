@@ -61,7 +61,9 @@ void Tester::begin() {
 		fileName.str("");
 		fileName.clear();
 		inputFileName.find_last_of("_");
-		fileName << outputFolder << "/" << outputFilePrefix << "_" << instance.getN() << inputFileName.substr(inputFileName.find_last_of("_"));
+		fileName << outputFolder << "/" << outputFilePrefix << "_"
+				<< instance.getN()
+				<< inputFileName.substr(inputFileName.find_last_of("_"));
 		cout << fileName.str() << endl;
 		instance_number++;
 		outFile.open(fileName.str().c_str(), ofstream::out | ofstream::trunc);
@@ -79,11 +81,22 @@ void Tester::begin() {
 			solution.refresh(true);
 		}
 		end_time = clock();
-		total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+		total_time = (double) (end_time - start_time) / CLOCKS_PER_SEC;
 		cout << start_time << " " << end_time << " " << total_time << endl;
-		outFile << "Time(s)\t" << (double)total_time << endl;
-		outFile << "Solution" << endl;
-		outFile << solution;
+		outFile << solution.getT() << "\t" << total_time << "\t"
+				<< (double) solution.getV() / instance.getJob(s[n - 1]).getC()
+				<< "\t"
+				<< (double) solution.getW() / instance.getJob(s[n - 1]).getC()
+				<< "\t";
+		for (int i = 0; i < n; i++)
+			outFile << s[i] << " ";
+		outFile << "\t";
+		for (int i = 0; i < n * 2; i++)
+			outFile << r[i] << " ";
+		outFile << "\t";
+//		outFile << "Time(s)\t" << total_time << endl;
+//		outFile << "Solution" << endl;
+//		outFile << solution;
 		outFile.close();
 	}
 }

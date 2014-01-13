@@ -57,7 +57,7 @@ void Heuristics::MinimumDueDateBatch(int* batches, Job* jobs, int n) {
 			i_batch++;
 		}
 	}
-	if(i_batch == n / 2)
+	if (i_batch == n / 2)
 		i_batch--;
 
 	int min_all;
@@ -149,17 +149,18 @@ void Heuristics::Jonhson(Job* jobs, int n, int* sequence) {
 	}
 }
 
-void Heuristics::Batching(Instance *instance, int* s, int* result) {
+void Heuristics::Batching(Instance *instance, int* s, int* r) {
 	int n = instance->getN();
 	// The current sequence of job.
 	int *current_s;
+	int *result;
 	int i_result;
 	int i_current_s;
 	int batch_start;
 	int min;
 	Solution solution(instance);
 	current_s = solution.getS();
-	solution.setR(result);
+	result = solution.getR();
 
 	// Initialization of result and current_s at 0.
 	for (int i = 0; i < 2 * n; i++) {
@@ -204,6 +205,10 @@ void Heuristics::Batching(Instance *instance, int* s, int* result) {
 			result[i_result - 1] = s[i];
 
 		}
+	}
+
+	for (int i = 0; i < n * 2; i++) {
+		r[i] = result[i];
 	}
 }
 
