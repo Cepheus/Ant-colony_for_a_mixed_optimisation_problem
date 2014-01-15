@@ -89,7 +89,7 @@
 	\\
 
 \[
-P^m_{}ij= \left\{ 
+P^m_{ij}= \left\{ 
 \begin{array}{l r}
 \frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta}{\underset{l\notin tabu_m}{\sum}[\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta} & \text{if } j\notin tabu_m\\
 0 & \text{if } j\in tabu_m
@@ -146,7 +146,7 @@ P^m_{}ij= \left\{
 
 \subsection{Definition of the Ant colony for the mixed optimisation problem}
 	
-	Here we decided to use the ant colony metaheuristic on the grouping problem. It is easy to find heuristics to construct the rest of the solution when we have the groups of jobs. We have to specify how to implement the ant colony algorithm to our sub-problem. This typical visualisation we use for an ant building a solution of the travelling salesman problem is a complete graph. The nodes of the graph are cities, when the ant goes from city $a$ to city $b$ is means we have the sequence $ab$ in our solution. The ant has to visit all nodes with a specific path. It chooses a path from the probability formula defined before.
+	\hspace{4ex}Here we decided to use the ant colony metaheuristic on the grouping problem. It is easy to find heuristics to construct the rest of the solution when we have the groups of jobs. We have to specify how to implement the ant colony algorithm to our sub-problem. This typical visualisation we use for an ant building a solution of the travelling salesman problem is a complete graph. The nodes of the graph are cities, when the ant goes from city $a$ to city $b$ is means we have the sequence $ab$ in our solution. The ant has to visit all nodes with a specific path. It chooses a path from the probability formula defined before.
 	
 	We use a different construction of solution for our algorithm. We take the jobs as the nodes of the graph and two edges (a green and a red) connect each node together. The graph has then $n$ nodes and $n(n+1)$ edges. During the construction of a solution, and ant can come from a node $a$ to a node $b$ from two different edges: If it takes the green edge it means node $a$ and $b$ belong to the same group, if it takes the red edge it means the two nodes don't belong to the same group. The figure \ref{ant_colony_graph} shows how to construct the groups from the path travelled by an ant on our graph.
 \\
@@ -188,20 +188,52 @@ P^m_{}ij= \left\{
 
 \[
 \eta_{ij} = 
-\left( \frac{1}{\vert d_i - d_j \vert} \right)^\psi \cdot \left[\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\sqrt{\delta_{0i} \cdot \delta_{0j}}}{\delta_{max}} \right]^\chi \text{, where } \vert d_i - d_j \vert \neq 0 \text{ and } \delta_{ij} \neq 0
+\left( \frac{1}{\vert d_i - d_j \vert} \right)^\psi \cdot \left[\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\sqrt{\delta_{0i} \cdot \delta_{0j}}}{\delta_{max}} \right]^\chi \text{, if } \vert d_i - d_j \vert = 0 \text{ then } \frac{1}{\vert d_i - d_j \vert} = 1 \text{ and if } \delta_{ij} = 0 \text{ then } \frac{1}{\delta_{ij}} = 1
 \]
 \\
 
-	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{-1}$ for the red edges take the inverse criteria of the visibility of the green edges:
+	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{'}$ for the red edges is the complement criteria of the visibility of the green edges:
 \\
 
 \[
-\eta_{ij}^{-1} = \frac{1}{\eta_{ij}} =
-\left( \vert d_i - d_j \vert \right)^\psi \cdot \left[\left(\delta_{ij}\right)^\omega \cdot \frac{\delta_{max}}{\sqrt{\delta_{0i} \cdot \delta_{0j}}} \right]^\chi \text{, where } \delta_{0i} \cdot \delta_{0j} \neq 0 
+\eta_{ij}^{'} = 1 - \eta_{ij}
 \]
 \\
 	
-\textit{Explain here the point of the roulette and how it is defined}
+	One last point needs to be defined: How do we choose an edges? When forming the batches, an ant has to choose an edge from the node it currently lies to another node. We have our probability formula defined before:
+	
+\[
+P^m_{ij}= \left\{ 
+\begin{array}{l r}
+\frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta}{\underset{l\notin tabu_m}{\sum}[\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta} & \text{if } j\notin tabu_m\\
+0 & \text{if } j\in tabu_m
+\end{array}
+\right.
+\]
+	
+	To make its choice an ant follows the following algorithm:
+	
+\begin{algorithm}
+	\caption{Choosing an edge going from node $i$}
+	\begin{algorithmic}[1]
+		\State $a \gets $ Random number $\in \left[0;1\right]$ 
+		\If {$a < P_0$}
+			\State \Return Edge with highest $p^m_{ij}$
+		\Else
+			\State $b \gets $ Random number $\in \left[0; \underset{j}{\sum}\tau_{ij}\right]$
+			\State $t \gets 0$
+			\State $k \gets 1$
+			\While {$t < b$}
+				\State $t \gets t + \tau_{ik}$
+				\State $k \gets k + 1$
+			\EndWhile
+			\State \Return Edge $k$
+		\EndIf
+	\end{algorithmic}
+	\label{roulette}
+\end{algorithm}
+
+	This value $P_0$ is a diversification probability, it is typically equal to 0.8. The point of such a mechanism is to allow the ants to choose edges disregard their visibility and with a random value in order to diversify the solutions and be able to explore new paths.
 
 \subsection{Algorithms}
 
@@ -219,16 +251,9 @@ P^m_{}ij= \left\{
 			\State Select random node $u$ from $\mathscr{N}$
     		\State $i \gets 1$
     		\Repeat
-    			\State Pick a random number $p \in \{0,1\}$
-    			\If {$p < P_0$}
-    				\State From all incident edges of $u$ get $v$ the edge with the maximum value of $P_{uv}$
-    				
-				\Else
-					\State \textit{Select edge v from roulette}
-    			\EndIf
-    			\If {$v \in \mathscr{G}$}
-   					\State $path.push(v)$
-   				\EndIf
+    			\State Select an edge $v$ going from $u$ with algorithm \ref{roulette}
+   				\State $path.push(v)$
+   				\State $u \gets $ node connected to $v$
    				\State $i \gets i+1$
     		\Until $i = n$
     		\State Each community of nodes linked with edged from $path$ form a group
@@ -245,6 +270,14 @@ P^m_{}ij= \left\{
         \State Global pheromone update
       \EndFor
       \State \textbf{return} Best found solution
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Global pheromone update}
+  \begin{algorithmic}[1]
+
+  \label{global_update}  	  
   \end{algorithmic}
 \end{algorithm}
 
