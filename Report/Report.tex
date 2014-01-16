@@ -267,25 +267,36 @@ P^m_{ij}= \left\{
 			\State Local pheromone update
         \EndFor
         \State Local search
-        \State Global pheromone update
+        \State Global pheromone update (see algorithm \ref{global_update})
       \EndFor
       \State \textbf{return} Best found solution
   \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-  \caption{Global pheromone update}
-  \begin{algorithmic}[1]
-
-  \label{global_update}  	  
-  \end{algorithmic}
+	\caption{Global pheromone update}
+	\begin{algorithmic}[1]
+		\State $\%improvement \gets oldBestSolution - newBestSolution$
+		\State $path \gets newBestSolution.getPath()$
+		\For {\textbf{each} edge $e$ in $path$}
+			\If {$edge.color == green$}
+				\State // $\tau_0$ is the minimal pheromone value.
+				\State $greenPheromoneMatrix[edge.start][edge.end] += \tau_0 * \%improvement$
+				\State $greenPheromoneMatrix[edge.end][edge.start] = greenPheromoneMatrix[edge.start][edge.end]$
+			\Else
+				\State $redPheromoneMatrix[edge.start][edge.end] += \tau_0 * \%improvement$	
+				\State $redPheromoneMatrix[edge.end][edge.start] = redPheromoneMatrix[edge.start][edge.end]$
+			\EndIf
+		\EndFor
+	\end{algorithmic}
+	\label{global_update}  	  
 \end{algorithm}
 
 \clearpage
 
-	When we have forms the batches of jobs we have to deduce the rest of the solution. In order to do so we will use heuristics. For the flowshop problem we select the order of batch in increasing order of the minimum of the due date of each batch. Each batch is then scheduled following Johnson's algorithm.
+	When we have formed the batches of jobs, we have to deduce the rest of the solution. In order to do so, we use simple heuristics. To form the sequence of the flowshop problem, we order the batches in increasing order of the minimum due date of the jobs within the batch. The jobs of a batch are then scheduled following Johnson's algorithm.
 	
-	For the travelling salesman problem we find the sequence of destination of each batch by using the closest neighbour criterion with each subset of jobs formed by our groups.
+	The final part to form our solution is to find the delivery order of the jobs of a batch. To do so, we use the nearest neighbour criterion. For each jobs of a batch, take the nearest neighbour until all the jobs of the batch are processed. We apply this rule to each batch to obtain the fully formed solution.
 
 
 
