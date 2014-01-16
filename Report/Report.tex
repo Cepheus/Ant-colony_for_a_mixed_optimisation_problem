@@ -1,7 +1,7 @@
 \documentclass[UTF8, twoside]{EPURapport}
 \input{include.tex}
 
-\thedocument{Operational research project draft}{Ant colony optimization algorithm for a combined routing and scheduling problem}{Ant colony optimization algorithm for a combined routing and scheduling problem}
+\thedocument{Operational research project report}{Ant colony optimization algorithm for a combined routing and scheduling problem}{Ant colony optimization algorithm for a combined routing and scheduling problem}
 
 \grade{Computer Aided Decision Support\\ International Research Master 2\\ 2013 - 2014}
 
@@ -31,12 +31,12 @@
 	
 \begin{itemize}
 \item[$\bullet$] The two machines permutation flowshop. We have two machines $M_1$ and $M_2$ organized as a flowshop. A set of $n$ jobs have to be scheduled into a sequence. Each job $j$ has a value $a_j$ and $b_j$ that correspond to the time required to complete the job $j$ on $M_1$ and $M_2$ respectively.
-\item[$\bullet$] The grouping of jobs to be delivered. When the jobs are completed for the two machines permutation flowshop we must form groups of jobs, where a group must contain at least one job. These groups are then used for the third sub-problem.
-\item[$\bullet$] A travelling salesman problem. We consider one truck taking the group of jobs previously formed where each job has a destination $k_j$. The idea is to find the sequence of destinations in order to deliver every job from the group while minimizing the travelling distance. We have a matrix $K$ ($m \times m$) where $m$ is the number of destinations and $K_i^j$ is the distance between the destination $i$ and $j$.
+\item[$\bullet$] The batching of jobs to be delivered. When the jobs are completed for the two machines permutation flowshop we must form batches of jobs, where a batch must contain at least one job. These groups are then used for the third sub-problem.
+\item[$\bullet$] A travelling salesman problem. We consider one truck taking the groups of jobs previously formed where each job has a destination $k_j$. The idea is to find the sequence of destinations in order to deliver every job from the batch while minimizing the travelling distance. We have a matrix $K$ ($m \times m$) where $m$ is the number of destinations and $K_i^j$ is the distance between the destination $i$ and $j$. It is important to know that every delivery has to start from the factory and come back to the factory after delivering every jobs. The factory is always the destination 0 in the matrix $K$.
 \end{itemize}
 
-	The objective function is to minimize the sum of tardiness of the jobs $\overset{j \leq n}{\underset{j=1}{\sum}} T_j$. The tardiness $T_j$ of a job is defined as follows: $T_j = max(L_j, 0)$ where the lateness $L_j$  of a job $j$ is the difference between the completion time of the job $c_j$ and its due date $d_j$: $L_j = c_j - d_j$. The completion time of a job is not equal to the completion time of the job for the flowshop problem but for the travelling salesman problem. \textbf{$c_j$ is equal to the date at which the truck is coming back to the factory after its deliveries.}
-\textbf{We consider that the truck has no capacity limit, it can carry has many jobs has possible.}
+	The objective function is to minimize the sum of tardiness of the jobs $\overset{j \leq n}{\underset{j=1}{\sum}} T_j$. The tardiness $T_j$ of a job is defined as follows: $T_j = max(L_j, 0)$ where the lateness $L_j$  of a job $j$ is the difference between the completion time of the job $C_j$ and its due date $d_j$: $L_j = C_j - d_j$. The completion time of a job is not equal to the completion time of the job for the flowshop problem but for the travelling salesman problem. $C_j$ is equal to the date at which the truck is coming back to the factory after its deliveries.
+	We consider that the truck has no capacity limit, it can carry has many jobs has possible.
 \\
 
 	The input data of our problem are the following :
@@ -50,9 +50,9 @@
 
 	During the resolution of the problem we must find the sequence of jobs on the flowshop, the groups of jobs to be delivered and the sequence of delivery for each group.
 
-	We proposed a first way of encoding a solution : a table of size $n$ containing the sequence of job for the flowshop sub-problem, a table of size $2n$ containing the groups and sequences for the travelling salesman sub-problem. The first cell of the second table contains the number of jobs for the first group, the following cells contain the number of jobs in the delivery sequence and so on. The figure \ref{problem} shows a solution for a simple instance of the problem with its encoding. 
+	We proposed a first way of encoding a solution : a table of size $n$ containing the sequence of job for the flowshop sub-problem, a table of size $2n$ containing the groups and sequences for the travelling salesman sub-problem. The first cell of the second table contains the number of jobs for the first group, the following cells contain the id of jobs in the delivery sequence and so on. The figure \ref{problem} shows a solution for a simple instance of the problem with its encoding. 
 	
-	The sequence here is $\{1,2,3\}$ the first group $G_1$ of jobs is $G_1 = \{1,2\}$ and 1 is delivered first, the second group $G_2$ only contains one job $G_2 = \{3\}$.
+	The sequence here is $\{1,2,3\}$ the first batch $G_1$ of jobs is $G_1 = \{1,2\}$ and 1 is delivered first, the second batch $G_2$ only contains one job $G_2 = \{3\}$.
 	
 	
 \begin{figure}
@@ -104,51 +104,40 @@ P^m_{ij}= \left\{
 	\\
 	
 \[
-\tau_{ij} = (1-\rho) \cdot \tau_{ij}+\rho \cdot \tau_{min}
+\tau_{ij} = (1-\rho) \cdot \tau_{ij}+\rho \cdot \tau_{0}
 \]
 
-	Where $\rho$ is the evaporation rate and $\tau_{min}$ the minimum value of the pheromone trail, which is also usually used as initial value. \textbf{It is important to consider that the evaporation function is only used for the paths the ants travelled through.}
+	Where $\rho$ is the evaporation rate and $\tau_{0}$ the minimum value of the pheromone trail, which is also usually used as initial value. It is important to consider that the evaporation function is only used for the paths the ants travelled through.
 \\
 
-	The global pheromone update is used to emulate the deposit of pheromone from the ants. This deposit is calculated from a formula based on the following :
+	The global pheromone update is used to emulate the deposit of pheromone from the ants. Again this function is only used for the edges the ant travelled while forming its solution. This deposit is calculated from a formula based on the following :
 	\\
 	
 \[
 \tau_{ij} = (1-\rho) \cdot \tau_{ij}+\rho \cdot \Delta\tau_{ij}
 \]
 
-	Where $\Delta\tau_{ij}$ can be defined as follows :
-	\\
-	
-\[
-\Delta\tau_{ij} = \left\{ 
-\begin{array}{l l}
-15 & \text{if } (i,j) \text{ is an edge in the best and second best,}\\
-10 & \text{if } (i,j) \text{ is an edge only in the best,}\\
-5 & \text{if } (i,j) \text{ is an edge only in the second best}\\
-\end{array}
-\right.
-\]
+	Where $\Delta\tau_{ij}$ is the improvement rate between the new best solution and the previous best solution.
 
 \section{Application to the combined routing and scheduling problem}
 
-	\hspace{4ex}One main issue to overcome here is the fact that there is no simple graph representation of the complete problem. For the travelling salesman problem, it is easy to see how the pheromone trails and the visibility comes from. For our problem it is quite different. We can try to imagine a graph that an ant could visit and form a complete solution from it. For instance, a node could represent the fact that a job $j$ is placed first in the flowshop, alone in a delivery group and delivered first. But we then have to consider every possibility knowing that the grouping and delivering problems are dependant on the flowshop. If we change the sequence of jobs in the flowshop we obtain a different grouping problem and then a different travelling salesman problem.
+	\hspace{4ex}One main issue to overcome here is the fact that there is no simple graph representation of the complete problem. For the travelling salesman problem, it is easy to see how the pheromone trails and the visibilities come from. For our problem it is quite different. We can try to imagine a graph that an ant could visit and form a complete solution from it. For instance, a node could represent the fact that a job $j$ is placed first in the flowshop, alone in a delivery group and delivered first. But we then have to consider every possibility knowing that the grouping and delivering problems are dependant on the flowshop. If we change the sequence of jobs in the flowshop we obtain a different grouping problem and then a different travelling salesman problem.
 	
-	Even though we happen to be able to model such graph, its size would be unreasonably huge. It is not rational to chose such solution. \textbf{We must abandon the idea to apply the ant colony optimization all at once for our problem, we need to think of a different approach.}
+	Even though we happen to be able to model such graph, its size would be unreasonably huge. It is not rational to chose such solution. We must abandon the idea to apply the ant colony optimization all at once for our problem and think of a different approach.
 	\\
 	
-	Instead of trying to use the ant colony metaheuristic for the complete problem, we can consider using it for parts of it. \textbf{We can chose to use the ant colony on one or several sub-problem and use different method to construct the rest of the solution and then update the pheromone trails based on the results of the whole solution.} 
+	Instead of trying to use the ant colony metaheuristic for the complete problem, we can consider using it for parts of it. We can chose to use the ant colony on one or several sub-problem and use different method to construct the rest of the solution and then update the pheromone trails based on the results of the whole solution.
 	
 	Although is not clever to consider using the ant colony for the travelling salesman sub-problem since the problem is different each time you change the groups to be delivered or the sequence of jobs from the flowshop. The pheromone trails would be lost each time you change the solution in any sub-problem above.
 	
-	We can still consider the other two sub-problems as potential candidate for the ant colony. Indeed, the flowshop problem and the grouping problem can both be considered central in our global problem. \textbf{We then have three possibilities, use the ant colony on the flowshop, on the grouping problem or both and use simple heuristics coupled with a surrogate mechanism to obtain the value of the objective function for our solution in order to guide the ants towards the best solution.} The surrogate mechanism could be very useful in order to save time computation, it would be used in the majority of cases and replaced with heuristics in the others in order to verify if the current solution is still a good one.
+	We can still consider the other two sub-problems as potential candidate for the ant colony. Indeed, the flowshop problem and the grouping problem can both be considered central in our global problem. We then have three possibilities, use the ant colony on the flowshop, on the grouping problem or both and use simple heuristics coupled with a surrogate mechanism to obtain the value of the objective function for our solution in order to guide the ants towards the best solution. The surrogate mechanism could be very useful in order to save time computation, it would be used in the majority of cases and replaced with heuristics in the others in order to verify if the current solution is still a good one.
 \\	
 
 \subsection{Definition of the Ant colony for the mixed optimisation problem}
 	
-	\hspace{4ex}Here we decided to use the ant colony metaheuristic on the grouping problem. It is easy to find heuristics to construct the rest of the solution when we have the groups of jobs. We have to specify how to implement the ant colony algorithm to our sub-problem. This typical visualisation we use for an ant building a solution of the travelling salesman problem is a complete graph. The nodes of the graph are cities, when the ant goes from city $a$ to city $b$ is means we have the sequence $ab$ in our solution. The ant has to visit all nodes with a specific path. It chooses a path from the probability formula defined before.
+	\hspace{4ex}Here we decided to use the ant colony metaheuristic on the batching problem. It is easy to find heuristics to construct the rest of the solution when we have the groups of jobs. We have to specify how to implement the ant colony algorithm to our sub-problem. This typical visualisation we use for an ant building a solution is the complete graph of cities of the travelling salesman problem. The nodes of the graph are cities, when the ant goes from city $a$ to city $b$ is means we have the sequence $ab$ in our solution. The ant has to visit all nodes with a specific path. It chooses a path from the probability formula defined before.
 	
-	We use a different construction of solution for our algorithm. We take the jobs as the nodes of the graph and two edges (a green and a red) connect each node together. The graph has then $n$ nodes and $n(n+1)$ edges. During the construction of a solution, and ant can come from a node $a$ to a node $b$ from two different edges: If it takes the green edge it means node $a$ and $b$ belong to the same group, if it takes the red edge it means the two nodes don't belong to the same group. The figure \ref{ant_colony_graph} shows how to construct the groups from the path travelled by an ant on our graph.
+	We use a different construction of solution for our algorithm. We take the jobs as the nodes of the graph and two edges (a green and a red) connecting each node together. The graph has then $n$ nodes and $n(n+1)$ edges. During the construction of a solution, and ant can come from a node $a$ to a node $b$ from two different edges: If it takes the green edge, it means node $a$ and $b$ belong to the same batch. If it takes the red edge, it means the two nodes do not belong to the same batch. The figure \ref{ant_colony_graph} shows how to construct the batches from the path travelled by an ant on our graph.
 \\
 
 \begin{figure} [h]
@@ -157,10 +146,10 @@ P^m_{ij}= \left\{
 	\label {ant_colony_graph}
 \end{figure}
 
-	We know how the ants construct the solution and how the graph is made. What we need is to define the visibility criterion for each arc of our graph. Let's define the visibility for the green edges, what is the formula that will make the ants form groups of jobs? We are handling a complex problem, we need to take into account the two other sub-problems: the flowshop, and the travelling salesman.
+	We know how the ants construct the solution and how the graph is made. We need to define the visibility criterion for each edge of our graph. Let's define the visibility for the green edges, what is the formula that will make the ants form groups of jobs? We are handling a complex problem, we need to take into account the two other sub-problems: the flowshop, and the travelling salesman.
 \\
 	
-	For the travelling salesman what we wish to do is group the jobs is their distance is small: $\frac{1}{\delta_{ij}}$ where $\delta_{ij}$ is the distance between the destination of job $i$ and the destination of job $j$. 
+	For the travelling salesman what we wish to do is group the jobs if their distance is small: $\frac{1}{\delta_{ij}}$ where $\delta_{ij}$ is the distance between the destination of job $i$ and the destination of job $j$. 
 	
 	For the deliveries we know that we have to start from the factory and to end at the factory, the distance between the destinations of the jobs and the factory matters, when the jobs are far from the factory we tend to form groups: $\frac{\delta_{0i} \cdot \delta_{0j}}{\delta_{max}}$ where $\delta_{0i}$ is the distance between the factory and the destination of job $i$ and $\delta_{max}$ is the maximum distance between the factory and any other destination. We divide by the maximum value in order to keep a value between 0 and 1.
 	
@@ -172,10 +161,10 @@ P^m_{ij}= \left\{
 \]
 \\
 
-\textbf{With this criterion, we will form groups of jobs the further their destinations are from the factory and the closer their destinations are from one another.}
+	With this criterion, we will form batches of jobs the further their destinations are from the factory and the closer their destinations are from one another.
 \\
 
-	For the flowshop sub-problem we want to consider the due dates of the jobs. \textbf{When the due dates of two jobs are close to each other we will tend to put them into the same group}: 
+	For the flowshop sub-problem we want to consider the due dates of the jobs. When the due dates of two jobs are close to each other we will tend to put them into the same group: 
 \\
 
 \[
@@ -187,20 +176,20 @@ P^m_{ij}= \left\{
 \\
 
 \[
-\eta_{ij} = 
+\eta_{ij}^g = 
 \left( \frac{1}{\vert d_i - d_j \vert} \right)^\psi \cdot \left[\left(\frac{1}{\delta_{ij}}\right)^\omega \cdot \frac{\sqrt{\delta_{0i} \cdot \delta_{0j}}}{\delta_{max}} \right]^\chi \text{, if } \vert d_i - d_j \vert = 0 \text{ then } \frac{1}{\vert d_i - d_j \vert} = 1 \text{ and if } \delta_{ij} = 0 \text{ then } \frac{1}{\delta_{ij}} = 1
 \]
 \\
 
-	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{'}$ for the red edges is the complement criteria of the visibility of the green edges:
+	We said before that this visibility was to be considered for the green edges of our graph. The visibility $\eta_{ij}^{r}$ for the red edges is the complement criteria of the visibility of the green edges:
 \\
 
 \[
-\eta_{ij}^{'} = 1 - \eta_{ij}
+\eta_{ij}^{r} = 1 - \eta_{ij}^g
 \]
 \\
 	
-	One last point needs to be defined: How do we choose an edges? When forming the batches, an ant has to choose an edge from the node it currently lies to another node. We have our probability formula defined before:
+	One last point needs to be defined: How do we choose the edges during the construction of a solution? When forming the batches, an ant has to choose an edge from the node it currently stands to another node. We have our probability formula defined before:
 	
 \[
 P^m_{ij}= \left\{ 
@@ -218,7 +207,7 @@ P^m_{ij}= \left\{
 	\begin{algorithmic}[1]
 		\State $a \gets $ Random number $\in \left[0;1\right]$ 
 		\If {$a < P_0$}
-			\State \Return Edge with highest $p^m_{ij}$
+			\State \Return Edge with highest $P^m_{ij}$
 		\Else
 			\State $b \gets $ Random number $\in \left[0; \underset{j}{\sum}\tau_{ij}\right]$
 			\State $t \gets 0$
@@ -233,7 +222,7 @@ P^m_{ij}= \left\{
 	\label{roulette}
 \end{algorithm}
 
-	This value $P_0$ is a diversification probability, it is typically equal to 0.8. The point of such a mechanism is to allow the ants to choose edges disregard their visibility and with a random value in order to diversify the solutions and be able to explore new paths.
+	This value $P_0$ is a diversification probability, it is typically equal to 0.8. It means that 80\% of the time the ant will take the edge with the maximum value of $P^m_{ij}$, and 20\% of the time the ant will choose a random edge using the sum of $\tau_{ij}$ as probability repartition. The point of such a mechanism is to allow the ants to choose edges disregard their visibility and with a random value in order to diversify the solutions and be able to explore new paths.
 
 \subsection{Algorithms}
 
@@ -276,16 +265,18 @@ P^m_{ij}= \left\{
 \begin{algorithm}
 	\caption{Global pheromone update}
 	\begin{algorithmic}[1]
-		\State $\%improvement \gets oldBestSolution - newBestSolution$
+		\State $\%improvement \gets (oldBestSolution - newBestSolution) / newBestSolution$
 		\State $path \gets newBestSolution.getPath()$
 		\For {\textbf{each} edge $e$ in $path$}
-			\If {$edge.color == green$}
-				\State // $\tau_0$ is the minimal pheromone value.
-				\State $greenPheromoneMatrix[edge.start][edge.end] += \tau_0 * \%improvement$
-				\State $greenPheromoneMatrix[edge.end][edge.start] = greenPheromoneMatrix[edge.start][edge.end]$
+			\If {$edge.color = green$}
+				\State // $\tau_0$ is the minimal pheromone value, $\tau_{ij}^g$ is the pheromone on the green edge between $i$ and $j$ and $\rho$ is the evaporation rate.
+				\State $i \gets edge.start$ 
+				\State $j \gets edge.end$
+				\State $\tau_{ij}^g = (1-\rho) \cdot \tau_{ij}^g + \rho \cdot \%improvement$
+				\State $\tau_{ji}^g = \tau_{ij}^g$
 			\Else
-				\State $redPheromoneMatrix[edge.start][edge.end] += \tau_0 * \%improvement$	
-				\State $redPheromoneMatrix[edge.end][edge.start] = redPheromoneMatrix[edge.start][edge.end]$
+				\State $\tau_{ij}^r = (1-\rho) \cdot \tau_{ij}^r + \rho \cdot \%improvement$
+				\State $\tau_{ji}^r = \tau_{ij}^r$
 			\EndIf
 		\EndFor
 	\end{algorithmic}
