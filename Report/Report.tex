@@ -25,6 +25,22 @@
 
 \begin{document}
 
+\chapter{Introduction}
+
+	\hspace{4ex}An unexplored topic in scheduling is the mixed problems. This domain is vast and contains a wide variety of problems. Some mixed problems can be very close to other known problems or the problems they are composed of. However there is another sort of mixed problems that can change the way we approach them completely. Our problem is from this second part, it is a combination of a flowshop, a travelling salesman and a batching problem.
+	
+	We can picture this problem as follows: a factory with two machine in a flowshop are producing objects that need to be delivered to different locations. The produced objects have a limited lifespan, they must reach their destination before a certain date. The objects once produced are organised in delivery batches. A unique truck making the deliveries of the batches choosing a certain delivery route between the factory and the different destinations of the objects. We want to minimise the tardiness of arrival of the objects to their destination, we do not want the objects to reach their destination after their expiration date. The problem can be resumed in three steps:
+\begin{itemize}
+\item[$\bullet$] Organise the production of the objects on the two production machines of the flowshop,
+\item[$\bullet$] Organise the produced objects into delivery batches,
+\item[$\bullet$] Choose a delivery route for each delivery batch between the factory and the destinations.
+\end{itemize}
+
+	In this project, we want to try a first approach of the problem with a metaheuristic: the ant colony. The ant colony can be used in order to take into account several constrains which is the case of our combined problem.
+	\\
+	
+	The rest of this report features the formalization of the problem, the general definitions of the ant colony metaheuristic, the ant colony heuristic applied to our problem, the results of this heuristic, the perspectives the project and finaly the assessment of this project in regard of my scholarship.
+
 \chapter{Formalization of the problem}
 
 	The problem can be defined from three different sub-problems :
@@ -288,6 +304,24 @@ P^m_{ij}= \left\{
 	When we have formed the batches of jobs, we have to deduce the rest of the solution. In order to do so, we use simple heuristics. To form the sequence of the flowshop problem, we order the batches in increasing order of the minimum due date of the jobs within the batch. The jobs of a batch are then scheduled following Johnson's algorithm.
 	
 	The final part to form our solution is to find the delivery order of the jobs of a batch. To do so, we use the nearest neighbour criterion. For each jobs of a batch, take the nearest neighbour until all the jobs of the batch are processed. We apply this rule to each batch to obtain the fully formed solution.
+\\
+
+	The method explained above is the first one ever tried on this problem. In order to be able to evaluate its performance we need another one to serve as comparison. It is in that purpose that we proposed a simple heuristic to solve the problem. The heuristic is actually formed of three methods, one for each sub-problem:
+\begin{itemize}
+\item[$\bullet$] Johnson's algorithm is used to find the sequence of jobs for the flowshop,
+\item[$\bullet$] The batches are formed with a simple method. We follow the sequence of jobs formed by the algorithm and decide to put a job into the current batch or to create a new one if the choice gives gives a lesser $\sum T$ than the other.
+\item[$\bullet$] For each batch we choose the delivery order of the jobs following the nearest neighbour criterion.
+\end{itemize}
+
+	This simple heuristic is used to see if a naive approach is more efficient that our less naive once.
+	
+\chapter{Results}
+
+\chapter{Perspectives}
+
+\chapter{Assessment}
+
+\chapter{Conclusion}
 
 
 
