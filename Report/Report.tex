@@ -317,6 +317,73 @@ P^m_{ij}= \left\{
 	
 \chapter{Results}
 
+\begin{table}[!h]
+\centering
+\tabcolsep=0.11cm
+\setlength{\extrarowheight}{1.5pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|} 
+\hline
+ & \multicolumn{12}{c|}{Heuristics} \\
+\hline
+n & $\sum T_{min}$ & $\sum T_{avg}$ & $\sum T_{max}$ & \begin{sideways} Time(s)$_{min}$ \end{sideways} & \begin{sideways} Time(s)$_{avg}$ \end{sideways} & \begin{sideways} Time(s)$_{max}$ \end{sideways} & $\% v_{min}$ & $\% v_{avg}$ & $\% v_{max}$ & $\% w_{min}$ & $\% w_{avg}$ & $\% w_{max}$\\
+\hline
+10 & 2735 & 3483.3 & 4327 & 0 & 0 & 0 & 3 & 22 & 40 & 2 & 15 & 26\\
+\hline
+20 & 11995 & 13345.1 & 14885 & 0 & 0 & 0 & 0 & 11 & 24 & 19 & 61 & 95\\
+\hline
+50 & 71125 & 82427.7 & 89546 & 0 & 0 & 0 & 3 & 12 & 25 & 50 & 70 & 90\\
+\hline
+\textbf{AVG} & \textbf{28618.33} & \textbf{33085.37} & \textbf{36252.67} & \textbf{0} & \textbf{0} & \textbf{0} & \textbf{2}  & \textbf{15} & \textbf{30} & \textbf{24} & \textbf{49} & \textbf{70}\\
+\hline
+\end{tabular}
+\caption{\label{tab:Heuristics}Results for heuristics}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\tabcolsep=0.11cm
+\setlength{\extrarowheight}{1.5pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|} 
+\hline
+ & \multicolumn{12}{c|}{Ants} \\
+\hline
+n & $\sum T_{min}$ & $\sum T_{avg}$ & $\sum T_{max}$ & \begin{sideways} Time(s)$_{min}$ \end{sideways} & \begin{sideways} Time(s)$_{avg}$ \end{sideways} & \begin{sideways} Time(s)$_{max}$ \end{sideways} & $\% v_{min}$ & $\% v_{avg}$ & $\% v_{max}$ & $\% w_{min}$ & $\% w_{avg}$ & $\% w_{max}$\\
+\hline
+10 & 2899 & 32767.90 & 5177 & 0.01 & 0.01 & 0.01 & 30 & 42 & 57 & 0 & 8 & 18\\
+\hline
+20 & 13528 & 14043.20 & 14766 & 0.02 & 0.02 & 0.02 & 27 & 41 & 59 & 0 & 9 & 26\\
+\hline
+50 & 72856 & 82069.80 & 87965 & 0.07 & 0.08 & 0.09 & 42 & 52 & 59 & 0 & 9 & 25\\
+\hline
+\textbf{AVG}& \textbf{29761} & \textbf{33293.63} & \textbf{35969.33} & \textbf{0.03} & \textbf{0.03} & \textbf{0.04} & \textbf{33} & \textbf{45} & \textbf{58} & \textbf{0} & \textbf{9} & \textbf{23}\\
+\hline
+\end{tabular}
+\caption{\label{tab:ants}Results for the ant colony}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\setlength{\extrarowheight}{1.5pt}
+\begin{tabular}{|c|c|c|c|c|c|c|} 
+\hline
+ & \multicolumn{6}{c|}{Ants - Heuristics} \\
+\hline
+n & $\Delta \sum T_{min}$ & $\Delta \sum T_{avg}$ & $\Delta \sum T_{max}$ & \begin{sideways}$\Delta$ Time(s)$_{min}$ \end{sideways} & \begin{sideways}$\Delta$ Time(s)$_{avg}$ \end{sideways} & \begin{sideways}$\Delta$ Time(s)$_{max}$ \end{sideways}\\
+\hline
+10 & \cellcolor{red}164 & \cellcolor{red}284.6 & \cellcolor{red}850 & \cellcolor{red}0.01 & \cellcolor{red}0.01 & \cellcolor{red}0.01\\
+\hline
+20 & \cellcolor{red}1533.00 & \cellcolor{red}698.10 & \cellcolor{green}-119 & \cellcolor{red}0.02 & \cellcolor{red}0.02 & \cellcolor{red}0.02\\
+\hline
+50 & \cellcolor{red}1731 & \cellcolor{green}-357.9 & \cellcolor{green}-1581 & \cellcolor{red}0.07 & \cellcolor{red}0.08 & \cellcolor{red}0.09\\
+\hline
+\textbf{AVG} & \cellcolor{red}\textbf{1142.667} & \cellcolor{red}\textbf{208.27} & \cellcolor{green}\textbf{-283.33} & \cellcolor{red}\textbf{0.03} & \cellcolor{red}\textbf{0.03} & \cellcolor{red}\textbf{0.04}\\
+\hline
+\end{tabular}
+\caption{\label{tab:diff}Difference of the results between the ant colony and the heuristics}
+\end{table}
+
+
+
 \chapter{Perspectives}
 
 \chapter{Assessment}
