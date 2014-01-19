@@ -27,9 +27,9 @@
 
 \chapter{Introduction}
 
-	\hspace{4ex}An unexplored topic in scheduling is the mixed problems. This domain is vast and contains a wide variety of problems. Some mixed problems can be very close to other known problems or the problems they are composed of. However there is another sort of mixed problems that can change the way we approach them completely. Our problem is from this second part, it is a combination of a flowshop, a travelling salesman and a batching problem.
+	\hspace{4ex}An unexplored topic in scheduling is the mixed problems. This domain is vast and contains a wide variety of problems. Some mixed problems can be very close to other known problems or the problems they are composed of. However there is another sort of mixed problems that can change the way we approach the original problems completely. Our problem is from this second part, it is a combination of a flowshop, a travelling salesman and a batching problem.
 	
-	We can picture this problem as follows: a factory with two machine in a flowshop are producing objects that need to be delivered to different locations. The produced objects have a limited lifespan, they must reach their destination before a certain date. The objects once produced are organised in delivery batches. A unique truck making the deliveries of the batches choosing a certain delivery route between the factory and the different destinations of the objects. We want to minimise the tardiness of arrival of the objects to their destination, we do not want the objects to reach their destination after their expiration date. The problem can be resumed in three steps:
+	We can picture this problem as follows: a factory with two machines in a flowshop are producing objects that need to be delivered to different locations. The produced objects have a limited lifespan, they must reach their destination before a certain date. The objects once produced are organised in delivery batches. A unique truck is making the deliveries of the batches choosing a certain delivery route between the factory and the different destinations of the objects. We want to minimise the tardiness of arrival of the objects to their destination, we do not want the objects to reach their destination after their expiration date. The problem can be resumed in three steps:
 \begin{itemize}
 \item[$\bullet$] Organise the production of the objects on the two production machines of the flowshop,
 \item[$\bullet$] Organise the produced objects into delivery batches,
@@ -61,7 +61,7 @@
 \begin{itemize}
 \item[$\bullet$] The number $n$ of jobs,
 \item[$\bullet$] The values $a_j$, $b_j$ and $d_j$ of job $j$ ($\forall j \in [1,n]$),
-\item[$\bullet$] The number of $m$ destinations,
+\item[$\bullet$] The number of $m$ of destinations,
 \item[$\bullet$] The destination $k_j$ of job $j$ ($\forall j \in [1,n]$),
 \item[$\bullet$] The matrix $K$ ($m \times m$) of distances between each destination.\\
 \end{itemize}
@@ -83,7 +83,7 @@
 
 \section{General definitions}
 
- 	\hspace{4ex}In this first part we will consider a travelling salesman problem in order to explain the mechanism of the ant colony metaheuristic. The graph representation of cities is an intuitive approach for such a method.
+ 	\hspace{4ex}In this part, we will consider a travelling salesman problem in order to explain the mechanism of the ant colony metaheuristic. The graph representation of cities is an intuitive approach for such a method.
 	
 	
 	The classic algorithm of an ant colony heuristic is the following :
@@ -321,7 +321,7 @@ P^m_{ij}= \left\{
 	
 \chapter{Results}
 
-	\hspace{4ex}This part presents the results obtained during this project. The value $v$ correspond to the idle time of the truck, the truck is idle when it is not delivering. The value $w$ correspond to the idle time of the jobs, a job is idle when it is completed on the flowshop and waits for being delivered.
+	\hspace{4ex}This part presents the results obtained during this project. The value $v$ correspond to the idle time of the truck, the truck is idle when it is not delivering. The value $w$ correspond to the idle time of the jobs, a job is idle when it is completed on the flowshop and waits to be delivered.
 	
 	Also each row of $n$ resumes 10 instances. The following simple generation has been used to create the instances:
 \begin{itemize}
@@ -427,15 +427,22 @@ n & $\Delta \sum T_{min}$ & $\Delta \sum T_{avg}$ & $\Delta \sum T_{max}$ & \beg
 
 \chapter{Assessment}
 
-	\hspace{4ex}This project was very enriching, the problem is completely unexplored and it was very interesting to see how we can use the ant colony for this problem. It was also the first time I used the ant colony metaheuristic in a project and helped me grasps the machinery behind it.
+	\hspace{4ex}This project was very enriching, the problem is completely unexplored and it was very interesting to see how we can use the ant colony for this problem. It was also the first time I used the ant colony metaheuristic in a project and helped me grasp the machinery behind it.
 \\
 
 	This project was not easy and I had some difficulties along it. The first difficulty was the application of the ant colony metaheuristic to our problem as explained at the beginning of the part \ref{Ant colony heuristic}. Also the project required a lot of implementation in a short amount of time. I did my best to make the code clear and commented so it could be reused for future projects.
 
 \chapter{Conclusion}
 
-	\hspace{4ex}I hope that my work will be useful for future work on this problem, and will help to provide good results to show for the ROADEF conference of 2014. I would like to conclude by thanking both supervisors of this project Jean-Charles Billaut and Nicolas Monmarché for their time, help and sympathy.
+	\hspace{4ex}I hope that my work will be useful for future work on this problem, and will help to provide good results to show at the ROADEF conference of 2014. I would like to conclude by thanking both supervisors of this project Jean-Charles Billaut and Nicolas Monmarché for their time, help and sympathy.
 
+\begin{thebibliography}{99}
 
+\bibitem{GG10}
+{\sc Marc Gravel, Caroline Gagné}
+{\ "Ant colony optimization for manufacturing aluminum bars."}.
+{ \textit{Chapter 7} from the book \textbf{Artificial Ants} \textit{From collective intelligence to real-life optimization and beyond}, Nicolas Monmarché, Frédéric Guinand, Patrick Siarry 2010}.
+
+\end{thebibliography}
 
 \end{document}
