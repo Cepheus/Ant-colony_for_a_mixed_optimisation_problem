@@ -39,9 +39,9 @@ void Generator::generate(string destinationFolder) {
 	srand(time(NULL));
 	// For each value of n.
 	for (int k = 0; k < n_size; k++) {
-		int destination[n[k]+1];
-		int x[n[k]+1];
-		int y[n[k]+1];
+		int destination[n[k] + 1];
+		int x[n[k] + 1];
+		int y[n[k] + 1];
 		// We generate nb_instances instances.
 		for (int i = 1; i <= nb_instances; i++) {
 			fileName.str("");
@@ -52,29 +52,34 @@ void Generator::generate(string destinationFolder) {
 			file << "n\t" << n[k] << "\n";
 			file << "m\t" << n[k] + 1 << "\n";
 			file << "j\t" << "a\t" << "b\t" << "d\t" << "k\n";
+			int a, b, d, sum_p;
+			a = b = d = sum_p = 0;
 			// We generate n jobs.
 			for (int j = 0; j < n[k]; j++) {
+				// k: [1,101]
 				destination[j] = rand() % (n[k] + 1);
-				file << j << "\t"
-						<< rand() % p_max + 1 << "\t"
-						// a: [1,100]
-						<< rand() % p_max + 1 << "\t"
-						// b: [1,100]
-						<< rand() % (int)(2 * gamma * p_max) + (gamma - alpha) * p_max << "\t"
-						// d: [(gamma-alpha)p_max, (gamma+alpha)p_max)], when alpha=gamma=0.5 [0;100]
+				// a: [1,100]
+				a = rand() % p_max + 1;
+				// b: [1,100]
+				b = rand() % p_max + 1;
+				sum_p += a + b;
+			}
+			for (int j = 0; j < n[k]; j++) {
+				// d: [(gamma-alpha)sum_p, (gamma+alpha)sum_p)]
+				d = rand() % (int)(2 * gamma * sum_p) + (gamma - alpha) * sum_p;
+				file << j << "\t" << a << "\t" << b << "\t" << d << "\t"
 						<< destination[j] << "\n";
-						// k: [1,101]
 			}
 			file << "K\n";
 			// We generate the coordinates of the destinations within the range [0,(p-max/2)-1]
-			for (int j = 0; j < n[k]+1; j++) {
-				x[j] = rand() % p_max/2;
-				y[j] = rand() % p_max/2;
+			for (int j = 0; j < n[k] + 1; j++) {
+				x[j] = rand() % p_max / 2;
+				y[j] = rand() % p_max / 2;
 			}
-			for (int j = 0; j < n[k]+1; j++) {
-				for (int l = 0; l < n[k]+1; l++) {
+			for (int j = 0; j < n[k] + 1; j++) {
+				for (int l = 0; l < n[k] + 1; l++) {
 					file << distance(x[j], y[j], x[l], y[l]);
-					if(l < n[k])
+					if (l < n[k])
 						file << "\t";
 				}
 				file << "\n";
@@ -87,8 +92,8 @@ void Generator::generate(string destinationFolder) {
 // Manhattan distance.
 int Generator::distance(int x1, int y1, int x2, int y2) {
 	int distance = 0;
-	distance += abs(x1-x2);
-	distance += abs(y1-y2);
+	distance += abs(x1 - x2);
+	distance += abs(y1 - y2);
 	return distance;
 }
 

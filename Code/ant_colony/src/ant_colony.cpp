@@ -17,6 +17,8 @@
 using namespace std;
 
 int main() {
+	
+	cout << "START" << endl;
 
 	/* Generator */
 //	int n[3] = { 10, 20, 50 };
@@ -24,7 +26,7 @@ int main() {
 //	generator.generate("./data");
 
 	/* Tester */
-	Tester tester("./data", "./results", false);
+	Tester tester("./data", "./results", true);
 	tester.begin();
 
 	/* Test */
