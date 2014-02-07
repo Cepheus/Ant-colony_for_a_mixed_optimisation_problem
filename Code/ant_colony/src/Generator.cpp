@@ -42,6 +42,8 @@ void Generator::generate(string destinationFolder) {
 		int destination[n[k] + 1];
 		int x[n[k] + 1];
 		int y[n[k] + 1];
+		int a[n[k]];
+		int b[n[k]];
 		// We generate nb_instances instances.
 		for (int i = 1; i <= nb_instances; i++) {
 			fileName.str("");
@@ -52,22 +54,22 @@ void Generator::generate(string destinationFolder) {
 			file << "n\t" << n[k] << "\n";
 			file << "m\t" << n[k] + 1 << "\n";
 			file << "j\t" << "a\t" << "b\t" << "d\t" << "k\n";
-			int a, b, d, sum_p;
-			a = b = d = sum_p = 0;
+			int d, sum_p;
+			d = sum_p = 0;
 			// We generate n jobs.
 			for (int j = 0; j < n[k]; j++) {
 				// k: [1,101]
 				destination[j] = rand() % (n[k] + 1);
 				// a: [1,100]
-				a = rand() % p_max + 1;
+				a[j] = rand() % p_max + 1;
 				// b: [1,100]
-				b = rand() % p_max + 1;
-				sum_p += a + b;
+				b[j] = rand() % p_max + 1;
+				sum_p += a[i] + b[i];
 			}
 			for (int j = 0; j < n[k]; j++) {
 				// d: [(gamma-alpha)sum_p, (gamma+alpha)sum_p)]
 				d = rand() % (int)(2 * gamma * sum_p) + (gamma - alpha) * sum_p;
-				file << j << "\t" << a << "\t" << b << "\t" << d << "\t"
+				file << j << "\t" << a[j] << "\t" << b[j] << "\t" << d << "\t"
 						<< destination[j] << "\n";
 			}
 			file << "K\n";

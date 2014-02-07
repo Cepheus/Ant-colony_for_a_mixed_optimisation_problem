@@ -49,6 +49,7 @@ void Tester::begin() {
 		fileName.clear();
 		fileName << dataFolder << "/" << dirFile->d_name;
 		inputFileName = fileName.str();
+
 		cout << inputFileName << endl;
 		Instance instance(inputFileName);
 		int n = instance.getN();
@@ -79,6 +80,10 @@ void Tester::begin() {
 			heuristics.Batching(&instance, s, r);
 			heuristics.NearestNeighbor(&instance, r);
 			solution.refresh(true);
+			if (inputFileName.compare("./data/dat_10_3.txt") == 0) {
+				cout << solution << endl;
+				int i = 0;
+			}
 		}
 		end_time = clock();
 		total_time = (double) (end_time - start_time) / CLOCKS_PER_SEC;
